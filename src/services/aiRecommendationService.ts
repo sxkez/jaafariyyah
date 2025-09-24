@@ -313,13 +313,13 @@ export class AIRecommendationEngine {
     return [
       {
         id: 1,
-        title: "Al-'Aqida al-Tahawiyya",
-        author: "Imam Abu Ja'far al-Tahawi",
-        category: "creed",
+        title: "Al-Kāfī (Uṣūl al-Kāfī)",
+        author: "Shaykh al-Kulaynī (d. 329 AH)",
+        category: "Hadith",
         language: "AR",
         rating: 5,
-        tags: ["Aqidah", "Creed", "Hanafi", "Classical"],
-        cover: "https://ext.same-assets.com/4138622892/2402292075.png"
+        tags: ["Shia", "Ahl al-Bayt", "Hadith", "Classical"],
+        cover: "https://images.arabicbookshop.net/132-313.jpg"
       },
       // ... other books would be here
     ];
@@ -329,14 +329,14 @@ export class AIRecommendationEngine {
     return [
       {
         bookId: "1",
-        title: "Al-'Aqida al-Tahawiyya",
-        author: "Imam Abu Ja'far al-Tahawi",
-        reason: "Essential Hanafi creed text",
+        title: "Al-Kāfī (Uṣūl al-Kāfī)",
+        author: "Shaykh al-Kulaynī",
+        reason: "Essential Shi'i Hadith text",
         confidence: 0.9,
-        category: "creed",
+        category: "Hadith",
         difficulty: "intermediate" as const,
         readingTime: "1h 30m",
-        cover: "https://ext.same-assets.com/4138622892/2402292075.png"
+        cover: "https://images.arabicbookshop.net/132-313.jpg"
       }
     ].slice(0, limit);
   }
