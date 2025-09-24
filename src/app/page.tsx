@@ -6,10 +6,10 @@ import Link from "next/link";
 import { DiscordWidget } from "@/components/DiscordWidget";
 import { PrayerTimesWidget } from "@/components/PrayerTimesWidget";
 
-// Discord invite link – replace with your real Al Ja‘fariyya invite
-const DISCORD_INVITE_URL = "https://discord.gg/jafariyya"; // TODO: replace with your real invite
+// Replace with your real Discord invite
+const DISCORD_INVITE_URL = "https://discord.gg/jafariyya";
 
-// Starfield background component with deterministic positions
+// 🌌 Starfield background
 function StarField() {
   const stars = Array.from({ length: 150 }, (_, i) => {
     const x = (i * 73 + 23) % 100;
@@ -42,28 +42,27 @@ function StarField() {
   );
 }
 
-// Hero section (Shi‘i copy)
+// 🕌 Hero section
 function HeroSection() {
-  const handleDiscordJoin = () => {
+  const handleDiscordJoin = () =>
     window.open(DISCORD_INVITE_URL, "_blank", "noopener,noreferrer");
-  };
 
   return (
     <section className="relative z-10 text-center px-6 py-20">
       <h1 className="text-6xl md:text-7xl font-bold text-white mb-4 leading-tight">
-        Al Ja'fariyyah
+        Al Ja‘fariyya
       </h1>
       <p className="text-xl text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed">
-        Where the light of Ja‘farī (Twelver Shi‘i) scholarship meets the inquisitive heart.
-        Learn, share, and connect around the Qur’an, the Sunnah of the Prophet ﷺ, and the teachings
-        of the Ahl al‑Bayt (a).
+        Where the light of Ja‘farī (Twelver Shi‘i) scholarship meets the
+        inquisitive heart. Learn, share, and connect around the Qur’an, the
+        Sunnah of the Prophet ﷺ, and the teachings of the Ahl al-Bayt (a).
       </p>
 
       <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
         <Button
           size="lg"
           onClick={handleDiscordJoin}
-          className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 shadow-lg hover:shadow-xl transition-all duration-300"
+          className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 shadow-lg hover:shadow-xl transition-all duration-300"
         >
           👥 Join Our Discord
         </Button>
@@ -71,7 +70,7 @@ function HeroSection() {
           <Button
             size="lg"
             variant="outline"
-            className="border-purple-400 text-purple-300 hover:bg-purple-500/20 px-8 py-3 transition-all duration-300"
+            className="border-green-400 text-green-300 hover:bg-green-500/20 px-8 py-3 transition-all duration-300"
           >
             📚 Explore Shi‘i Books
           </Button>
@@ -80,7 +79,7 @@ function HeroSection() {
           <Button
             size="lg"
             variant="outline"
-            className="border-purple-400 text-purple-300 hover:bg-purple-500/20 px-8 py-3 transition-all duration-300"
+            className="border-green-400 text-green-300 hover:bg-green-500/20 px-8 py-3 transition-all duration-300"
           >
             🎥 Watch Lessons
           </Button>
@@ -90,47 +89,28 @@ function HeroSection() {
   );
 }
 
-// Features section (unchanged structure, Shi‘i wording)
+// 📚 Features
 function FeaturesSection() {
-  const handleDiscordJoin = () => {
+  const handleDiscordJoin = () =>
     window.open(DISCORD_INVITE_URL, "_blank", "noopener,noreferrer");
-  };
 
   const features = [
     {
-      icon: (
-        <div className="w-16 h-16 bg-purple-600/20 rounded-lg flex items-center justify-center mb-4 mx-auto">
-          <svg className="w-8 h-8 text-purple-300" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-          </svg>
-        </div>
-      ),
       title: "Join our Discord",
       description: "Connect with students of the Ja‘farī tradition",
+      icon: "💬",
       onClick: handleDiscordJoin,
     },
     {
-      icon: (
-        <div className="w-16 h-16 bg-purple-600/20 rounded-lg flex items-center justify-center mb-4 mx-auto">
-          <svg className="w-8 h-8 text-purple-300" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
-          </svg>
-        </div>
-      ),
       title: "Explore Books",
       description: "Curated Shi‘i library across key disciplines",
+      icon: "📚",
       link: "/books/",
     },
     {
-      icon: (
-        <div className="w-16 h-16 bg-purple-600/20 rounded-lg flex items-center justify-center mb-4 mx-auto">
-          <svg className="w-8 h-8 text-purple-300" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M8 5v14l11-7z"/>
-          </svg>
-        </div>
-      ),
       title: "Watch Lessons",
       description: "Featured lectures and playlists",
+      icon: "🎥",
       link: "/videos/",
     },
   ];
@@ -138,79 +118,74 @@ function FeaturesSection() {
   return (
     <section className="relative z-10 px-6 py-20">
       <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
-        {features.map((feature, index) => (
-          <div key={index}>
-            {feature.link ? (
-              <Link href={feature.link}>
-                <Card className="bg-purple-900/30 border-purple-600/30 backdrop-blur-sm hover:bg-purple-900/40 transition-all duration-300 cursor-pointer">
-                  <CardContent className="p-8 text-center">
-                    {feature.icon}
-                    <h3 className="text-xl font-semibold text-white mb-3">{feature.title}</h3>
-                    <p className="text-gray-300 leading-relaxed">{feature.description}</p>
-                  </CardContent>
-                </Card>
-              </Link>
-            ) : (
-              <Card
-                className="bg-purple-900/30 border-purple-600/30 backdrop-blur-sm hover:bg-purple-900/40 transition-all duration-300 cursor-pointer"
-                onClick={feature.onClick}
-              >
+        {features.map((feature, i) =>
+          feature.link ? (
+            <Link href={feature.link} key={i}>
+              <Card className="bg-green-900/30 border-green-600/30 backdrop-blur-sm hover:bg-green-900/40 transition-all duration-300 cursor-pointer">
                 <CardContent className="p-8 text-center">
-                  {feature.icon}
-                  <h3 className="text-xl font-semibold text-white mb-3">{feature.title}</h3>
-                  <p className="text-gray-300 leading-relaxed">{feature.description}</p>
+                  <div className="text-4xl mb-4">{feature.icon}</div>
+                  <h3 className="text-xl font-semibold text-white mb-3">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-300">{feature.description}</p>
                 </CardContent>
               </Card>
-            )}
-          </div>
-        ))}
+            </Link>
+          ) : (
+            <Card
+              key={i}
+              onClick={feature.onClick}
+              className="bg-green-900/30 border-green-600/30 backdrop-blur-sm hover:bg-green-900/40 transition-all duration-300 cursor-pointer"
+            >
+              <CardContent className="p-8 text-center">
+                <div className="text-4xl mb-4">{feature.icon}</div>
+                <h3 className="text-xl font-semibold text-white mb-3">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-300">{feature.description}</p>
+              </CardContent>
+            </Card>
+          )
+        )}
       </div>
     </section>
   );
 }
 
-// Footer (Shi‘i quote + functional links)
+// 🕋 Footer
 function Footer() {
-  const handleDiscordClick = () => {
-    window.open(DISCORD_INVITE_URL, "_blank", "noopener,noreferrer");
-  };
-
-  const handleTikTokClick = () => {
-    window.open("https://tiktok.com/@aljafariyya", "_blank", "noopener,noreferrer");
-  };
-
-  const handleInstagramClick = () => {
-    window.open("https://instagram.com/aljafariyya", "_blank", "noopener,noreferrer");
-  };
+  const open = (url: string) =>
+    window.open(url, "_blank", "noopener,noreferrer");
 
   return (
-    <footer className="relative z-10 text-center px-6 py-12 border-t border-purple-600/30">
+    <footer className="relative z-10 text-center px-6 py-12 border-t border-green-600/30">
       <div className="max-w-4xl mx-auto">
         <p className="text-gray-300 mb-8 italic text-lg">
-          “May Allah have mercy on the one who revives our affair.” — Imām Ja‘far al‑Ṣādiq (a)
+          “May Allah have mercy on the one who revives our affair.” — Imām Ja‘far
+          al-Ṣādiq (a)
         </p>
         <div className="flex justify-center gap-6">
           <Button
             variant="ghost"
             size="sm"
-            onClick={handleDiscordClick}
-            className="text-purple-300 hover:text-white hover:bg-purple-600/20 transition-all duration-300"
+            onClick={() => open(DISCORD_INVITE_URL)}
+            className="text-green-300 hover:text-white hover:bg-green-600/20 transition-all"
           >
             Discord
           </Button>
           <Button
             variant="ghost"
             size="sm"
-            onClick={handleTikTokClick}
-            className="text-purple-300 hover:text-white hover:bg-purple-600/20 transition-all duration-300"
+            onClick={() => open("https://tiktok.com/@aljafariyya")}
+            className="text-green-300 hover:text-white hover:bg-green-600/20 transition-all"
           >
             TikTok
           </Button>
           <Button
             variant="ghost"
             size="sm"
-            onClick={handleInstagramClick}
-            className="text-purple-300 hover:text-white hover:bg-purple-600/20 transition-all duration-300"
+            onClick={() => open("https://instagram.com/aljafariyya")}
+            className="text-green-300 hover:text-white hover:bg-green-600/20 transition-all"
           >
             Instagram
           </Button>
@@ -220,18 +195,22 @@ function Footer() {
   );
 }
 
+// 🌙 Main Home Page
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-950 via-indigo-950 to-blue-950 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-green-950 via-emerald-950 to-teal-950 relative overflow-hidden">
       <StarField />
       <div className="relative z-10">
         <HeroSection />
         <FeaturesSection />
-        {/* Community & Prayer Times Section */}
+
+        {/* Discord & Prayer Times */}
         <section className="relative z-10 px-6 py-20">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Stay Connected</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                Stay Connected
+              </h2>
               <p className="text-xl text-gray-300 max-w-2xl mx-auto">
                 Join our vibrant community and stay updated with prayer times
               </p>
@@ -242,6 +221,7 @@ export default function Home() {
             </div>
           </div>
         </section>
+
         <Footer />
       </div>
     </div>

@@ -1,24 +1,23 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 // Dynamically import react-pdf components to avoid SSR issues
 const Document = dynamic(
-  () => import('react-pdf').then((mod) => mod.Document),
+  () => import("react-pdf").then((mod) => mod.Document),
   { ssr: false }
 );
 
-const Page = dynamic(
-  () => import('react-pdf').then((mod) => mod.Page),
-  { ssr: false }
-);
+const Page = dynamic(() => import("react-pdf").then((mod) => mod.Page), {
+  ssr: false,
+});
 
 // Configure PDF.js worker (only on client side)
-if (typeof window !== 'undefined') {
-  import('react-pdf').then((pdfjs) => {
+if (typeof window !== "undefined") {
+  import("react-pdf").then((pdfjs) => {
     pdfjs.pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.pdfjs.version}/build/pdf.worker.min.js`;
   });
 }
@@ -37,7 +36,13 @@ interface BookmarkData {
   timestamp: Date;
 }
 
-export function PDFViewer({ bookTitle, pdfUrl, isOpen, onClose, bookId }: PDFViewerProps) {
+export function PDFViewer({
+  bookTitle,
+  pdfUrl,
+  isOpen,
+  onClose,
+  bookId,
+}: PDFViewerProps) {
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [scale, setScale] = useState<number>(1.2);
@@ -47,30 +52,30 @@ export function PDFViewer({ bookTitle, pdfUrl, isOpen, onClose, bookId }: PDFVie
   const [error, setError] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
 
-  // Ensure component only renders on client
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  useEffect(() => setIsClient(true), []);
 
-  // Load bookmarks from localStorage
+  // Load bookmarks
   useEffect(() => {
     if (bookId) {
       const saved = localStorage.getItem(`bookmarks-${bookId}`);
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          setBookmarks(parsed.map((b: { page: number; title: string; timestamp: string }) => ({
-            ...b,
-            timestamp: new Date(b.timestamp)
-          })));
+          setBookmarks(
+            parsed.map(
+              (b: { page: number; title: string; timestamp: string }) => ({
+                ...b,
+                timestamp: new Date(b.timestamp),
+              })
+            )
+          );
         } catch (e) {
-          console.error('Failed to load bookmarks:', e);
+          console.error("Failed to load bookmarks:", e);
         }
       }
     }
   }, [bookId]);
 
-  // Save bookmarks to localStorage
   const saveBookmarks = (newBookmarks: BookmarkData[]) => {
     if (bookId) {
       localStorage.setItem(`bookmarks-${bookId}`, JSON.stringify(newBookmarks));
@@ -84,32 +89,21 @@ export function PDFViewer({ bookTitle, pdfUrl, isOpen, onClose, bookId }: PDFVie
   };
 
   const onDocumentLoadError = (error: Error) => {
-    setError('Failed to load PDF. Please try again.');
+    setError("Failed to load PDF. Please try again.");
     setLoading(false);
-    console.error('PDF loading error:', error);
+    console.error("PDF loading error:", error);
   };
 
-  const goToPrevious = () => {
-    setPageNumber(prev => Math.max(1, prev - 1));
-  };
-
-  const goToNext = () => {
-    setPageNumber(prev => Math.min(numPages, prev + 1));
-  };
-
-  const zoomIn = () => {
-    setScale(prev => Math.min(3, prev + 0.2));
-  };
-
-  const zoomOut = () => {
-    setScale(prev => Math.max(0.5, prev - 0.2));
-  };
+  const goToPrevious = () => setPageNumber((prev) => Math.max(1, prev - 1));
+  const goToNext = () => setPageNumber((prev) => Math.min(numPages, prev + 1));
+  const zoomIn = () => setScale((prev) => Math.min(3, prev + 0.2));
+  const zoomOut = () => setScale((prev) => Math.max(0.5, prev - 0.2));
 
   const addBookmark = () => {
     const newBookmark: BookmarkData = {
       page: pageNumber,
       title: `Page ${pageNumber}`,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
     const newBookmarks = [...bookmarks, newBookmark];
     setBookmarks(newBookmarks);
@@ -132,14 +126,14 @@ export function PDFViewer({ bookTitle, pdfUrl, isOpen, onClose, bookId }: PDFVie
   return (
     <div className="fixed inset-0 bg-black/90 z-50 flex flex-col">
       {/* Header */}
-      <div className="bg-purple-900/90 backdrop-blur-sm border-b border-purple-600/30 p-4">
+      <div className="bg-green-900/90 backdrop-blur-sm border-b border-green-600/40 p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button
               onClick={onClose}
               variant="ghost"
               size="sm"
-              className="text-white hover:bg-purple-800"
+              className="text-white hover:bg-green-800"
             >
               ← Back
             </Button>
@@ -151,7 +145,7 @@ export function PDFViewer({ bookTitle, pdfUrl, isOpen, onClose, bookId }: PDFVie
               onClick={() => setShowBookmarks(!showBookmarks)}
               variant="outline"
               size="sm"
-              className="border-purple-400 text-purple-300 hover:bg-purple-500/20"
+              className="border-green-400 text-green-300 hover:bg-green-500/20"
             >
               📚 Bookmarks ({bookmarks.length})
             </Button>
@@ -159,7 +153,7 @@ export function PDFViewer({ bookTitle, pdfUrl, isOpen, onClose, bookId }: PDFVie
               onClick={addBookmark}
               variant="outline"
               size="sm"
-              className="border-purple-400 text-purple-300 hover:bg-purple-500/20"
+              className="border-green-400 text-green-300 hover:bg-green-500/20"
             >
               🔖 Bookmark Page
             </Button>
@@ -170,21 +164,28 @@ export function PDFViewer({ bookTitle, pdfUrl, isOpen, onClose, bookId }: PDFVie
       <div className="flex flex-1">
         {/* Bookmarks Sidebar */}
         {showBookmarks && (
-          <div className="w-80 bg-purple-900/80 backdrop-blur-sm border-r border-purple-600/30 p-4 overflow-y-auto">
+          <div className="w-80 bg-green-900/80 backdrop-blur-sm border-r border-green-600/40 p-4 overflow-y-auto">
             <h3 className="text-lg font-semibold text-white mb-4">Bookmarks</h3>
             {bookmarks.length === 0 ? (
-              <p className="text-gray-400 text-sm">No bookmarks yet. Click "Bookmark Page" to save your progress!</p>
+              <p className="text-gray-400 text-sm">
+                No bookmarks yet. Click "Bookmark Page" to save your progress!
+              </p>
             ) : (
               <div className="space-y-2">
                 {bookmarks.map((bookmark, index) => (
-                  <Card key={index} className="bg-purple-800/30 border-purple-600/30">
+                  <Card
+                    key={index}
+                    className="bg-green-800/30 border-green-600/40"
+                  >
                     <CardContent className="p-3">
                       <div className="flex items-center justify-between">
                         <div
                           className="flex-1 cursor-pointer"
                           onClick={() => goToBookmark(bookmark)}
                         >
-                          <p className="text-white text-sm font-medium">Page {bookmark.page}</p>
+                          <p className="text-white text-sm font-medium">
+                            Page {bookmark.page}
+                          </p>
                           <p className="text-gray-400 text-xs">
                             {bookmark.timestamp.toLocaleDateString()}
                           </p>
@@ -209,7 +210,7 @@ export function PDFViewer({ bookTitle, pdfUrl, isOpen, onClose, bookId }: PDFVie
         {/* Main Content */}
         <div className="flex-1 flex flex-col">
           {/* Controls */}
-          <div className="bg-purple-900/80 backdrop-blur-sm border-b border-purple-600/30 p-4">
+          <div className="bg-green-900/80 backdrop-blur-sm border-b border-green-600/40 p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Button
@@ -217,7 +218,7 @@ export function PDFViewer({ bookTitle, pdfUrl, isOpen, onClose, bookId }: PDFVie
                   disabled={pageNumber <= 1}
                   variant="outline"
                   size="sm"
-                  className="border-purple-400 text-purple-300 hover:bg-purple-500/20 disabled:opacity-50"
+                  className="border-green-400 text-green-300 hover:bg-green-500/20 disabled:opacity-50"
                 >
                   ← Previous
                 </Button>
@@ -229,7 +230,7 @@ export function PDFViewer({ bookTitle, pdfUrl, isOpen, onClose, bookId }: PDFVie
                   disabled={pageNumber >= numPages}
                   variant="outline"
                   size="sm"
-                  className="border-purple-400 text-purple-300 hover:bg-purple-500/20 disabled:opacity-50"
+                  className="border-green-400 text-green-300 hover:bg-green-500/20 disabled:opacity-50"
                 >
                   Next →
                 </Button>
@@ -240,16 +241,18 @@ export function PDFViewer({ bookTitle, pdfUrl, isOpen, onClose, bookId }: PDFVie
                   onClick={zoomOut}
                   variant="outline"
                   size="sm"
-                  className="border-purple-400 text-purple-300 hover:bg-purple-500/20"
+                  className="border-green-400 text-green-300 hover:bg-green-500/20"
                 >
                   🔍-
                 </Button>
-                <span className="text-white text-sm">{Math.round(scale * 100)}%</span>
+                <span className="text-white text-sm">
+                  {Math.round(scale * 100)}%
+                </span>
                 <Button
                   onClick={zoomIn}
                   variant="outline"
                   size="sm"
-                  className="border-purple-400 text-purple-300 hover:bg-purple-500/20"
+                  className="border-green-400 text-green-300 hover:bg-green-500/20"
                 >
                   🔍+
                 </Button>
@@ -270,7 +273,7 @@ export function PDFViewer({ bookTitle, pdfUrl, isOpen, onClose, bookId }: PDFVie
                     setPageNumber(page);
                   }
                 }}
-                className="w-20 px-2 py-1 bg-purple-900/30 border border-purple-600/30 rounded text-white text-sm"
+                className="w-20 px-2 py-1 bg-green-900/30 border border-green-600/40 rounded text-white text-sm"
               />
             </div>
           </div>
@@ -279,7 +282,7 @@ export function PDFViewer({ bookTitle, pdfUrl, isOpen, onClose, bookId }: PDFVie
           <div className="flex-1 overflow-auto bg-gray-100 flex items-center justify-center">
             {loading && (
               <div className="text-center">
-                <div className="animate-spin w-8 h-8 border-2 border-purple-600 border-t-transparent rounded-full mb-4 mx-auto"></div>
+                <div className="animate-spin w-8 h-8 border-2 border-green-600 border-t-transparent rounded-full mb-4 mx-auto"></div>
                 <p className="text-gray-600">Loading PDF...</p>
               </div>
             )}
@@ -287,7 +290,7 @@ export function PDFViewer({ bookTitle, pdfUrl, isOpen, onClose, bookId }: PDFVie
             {error && (
               <div className="text-center text-red-600">
                 <p className="mb-4">{error}</p>
-                <Button onClick={() => window.location.reload()} className="bg-purple-600 hover:bg-purple-700">
+                <Button className="bg-green-600 hover:bg-green-700">
                   Retry
                 </Button>
               </div>
@@ -298,19 +301,23 @@ export function PDFViewer({ bookTitle, pdfUrl, isOpen, onClose, bookId }: PDFVie
                 file={pdfUrl}
                 onLoadSuccess={onDocumentLoadSuccess}
                 onLoadError={onDocumentLoadError}
-                loading={<div className="animate-spin w-8 h-8 border-2 border-purple-600 border-t-transparent rounded-full"></div>}
+                loading={
+                  <div className="animate-spin w-8 h-8 border-2 border-green-600 border-t-transparent rounded-full"></div>
+                }
               >
                 <Page
                   pageNumber={pageNumber}
                   scale={scale}
-                  loading={<div className="animate-spin w-6 h-6 border-2 border-purple-600 border-t-transparent rounded-full"></div>}
+                  loading={
+                    <div className="animate-spin w-6 h-6 border-2 border-green-600 border-t-transparent rounded-full"></div>
+                  }
                 />
               </Document>
             )}
 
             {!isClient && (
               <div className="text-center">
-                <div className="animate-spin w-8 h-8 border-2 border-purple-600 border-t-transparent rounded-full mb-4 mx-auto"></div>
+                <div className="animate-spin w-8 h-8 border-2 border-green-600 border-t-transparent rounded-full mb-4 mx-auto"></div>
                 <p className="text-gray-600">Initializing PDF viewer...</p>
               </div>
             )}

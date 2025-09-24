@@ -1,16 +1,16 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { useState, useEffect } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import {
   getPrayerTimes,
   getUserLocation,
   formatPrayerTime,
   getIslamicEvents,
   type PrayerTimes,
-  type LocationInfo
-} from '@/services/prayerTimesService';
+  type LocationInfo,
+} from "@/services/prayerTimesService";
 
 interface PrayerTimesWidgetProps {
   compact?: boolean;
@@ -20,12 +20,12 @@ export function PrayerTimesWidget({ compact = false }: PrayerTimesWidgetProps) {
   const [prayerTimes, setPrayerTimes] = useState<PrayerTimes | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [locationPermission, setLocationPermission] = useState<'granted' | 'denied' | 'prompt'>('prompt');
+  const [locationPermission, setLocationPermission] = useState<
+    "granted" | "denied" | "prompt"
+  >("prompt");
 
   useEffect(() => {
     loadPrayerTimes();
-
-    // Update prayer times every hour
     const interval = setInterval(loadPrayerTimes, 60 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
@@ -39,25 +39,24 @@ export function PrayerTimesWidget({ compact = false }: PrayerTimesWidgetProps) {
       const times = await getPrayerTimes(location);
 
       setPrayerTimes(times);
-      setLocationPermission('granted');
+      setLocationPermission("granted");
     } catch (err) {
-      console.error('Prayer times error:', err);
-      setError('Unable to load prayer times');
-      setLocationPermission('denied');
+      console.error("Prayer times error:", err);
+      setError("Unable to load prayer times");
+      setLocationPermission("denied");
 
-      // Load with default location
       try {
         const defaultLocation: LocationInfo = {
-          city: 'Mecca',
-          country: 'Saudi Arabia',
+          city: "Mecca",
+          country: "Saudi Arabia",
           latitude: 21.4225,
           longitude: 39.8262,
-          timezone: 'Asia/Riyadh'
+          timezone: "Asia/Riyadh",
         };
         const times = await getPrayerTimes(defaultLocation);
         setPrayerTimes(times);
       } catch (fallbackError) {
-        console.error('Fallback prayer times failed:', fallbackError);
+        console.error("Fallback prayer times failed:", fallbackError);
       }
     } finally {
       setLoading(false);
@@ -65,16 +64,16 @@ export function PrayerTimesWidget({ compact = false }: PrayerTimesWidgetProps) {
   };
 
   const requestLocation = () => {
-    setLocationPermission('prompt');
+    setLocationPermission("prompt");
     loadPrayerTimes();
   };
 
   if (loading) {
     return (
-      <Card className="bg-purple-900/30 border-purple-600/30 backdrop-blur-sm">
+      <Card className="bg-green-900/30 border-green-600/30 backdrop-blur-sm">
         <CardContent className="p-6">
           <div className="flex items-center justify-center">
-            <div className="animate-spin w-6 h-6 border-2 border-purple-600 border-t-transparent rounded-full"></div>
+            <div className="animate-spin w-6 h-6 border-2 border-green-600 border-t-transparent rounded-full"></div>
             <span className="ml-3 text-gray-300">Loading prayer times...</span>
           </div>
         </CardContent>
@@ -84,7 +83,7 @@ export function PrayerTimesWidget({ compact = false }: PrayerTimesWidgetProps) {
 
   if (!prayerTimes) {
     return (
-      <Card className="bg-purple-900/30 border-purple-600/30 backdrop-blur-sm">
+      <Card className="bg-green-900/30 border-green-600/30 backdrop-blur-sm">
         <CardContent className="p-6">
           <div className="text-center">
             <div className="text-4xl mb-2">🕌</div>
@@ -93,7 +92,7 @@ export function PrayerTimesWidget({ compact = false }: PrayerTimesWidgetProps) {
             <Button
               onClick={requestLocation}
               variant="outline"
-              className="border-purple-400 text-purple-300 hover:bg-purple-500/20"
+              className="border-green-400 text-green-300 hover:bg-green-500/20"
             >
               Retry
             </Button>
@@ -107,18 +106,23 @@ export function PrayerTimesWidget({ compact = false }: PrayerTimesWidgetProps) {
 
   if (compact) {
     return (
-      <Card className="bg-purple-900/30 border-purple-600/30 backdrop-blur-sm">
+      <Card className="bg-green-900/30 border-green-600/30 backdrop-blur-sm">
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-white font-semibold">Next: {prayerTimes.nextPrayer.name}</p>
-              <p className="text-purple-200 text-sm">
-                {formatPrayerTime(prayerTimes.nextPrayer.time)} ({prayerTimes.nextPrayer.timeUntil})
+              <p className="text-white font-semibold">
+                Next: {prayerTimes.nextPrayer.name}
+              </p>
+              <p className="text-green-200 text-sm">
+                {formatPrayerTime(prayerTimes.nextPrayer.time)} (
+                {prayerTimes.nextPrayer.timeUntil})
               </p>
             </div>
             <div className="text-right">
               <p className="text-gray-300 text-sm">{prayerTimes.location.city}</p>
-              <p className="text-gray-400 text-xs">{prayerTimes.hijriDate.formatted}</p>
+              <p className="text-gray-400 text-xs">
+                {prayerTimes.hijriDate.formatted}
+              </p>
             </div>
           </div>
         </CardContent>
@@ -127,7 +131,7 @@ export function PrayerTimesWidget({ compact = false }: PrayerTimesWidgetProps) {
   }
 
   return (
-    <Card className="bg-purple-900/30 border-purple-600/30 backdrop-blur-sm">
+    <Card className="bg-green-900/30 border-green-600/30 backdrop-blur-sm">
       <CardContent className="p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
@@ -137,15 +141,17 @@ export function PrayerTimesWidget({ compact = false }: PrayerTimesWidgetProps) {
             </div>
             <div>
               <h3 className="text-lg font-semibold text-white">Prayer Times</h3>
-              <p className="text-purple-200 text-sm">{prayerTimes.location.city}, {prayerTimes.location.country}</p>
+              <p className="text-green-200 text-sm">
+                {prayerTimes.location.city}, {prayerTimes.location.country}
+              </p>
             </div>
           </div>
-          {locationPermission === 'denied' && (
+          {locationPermission === "denied" && (
             <Button
               onClick={requestLocation}
               variant="outline"
               size="sm"
-              className="border-purple-400 text-purple-300 hover:bg-purple-500/20"
+              className="border-green-400 text-green-300 hover:bg-green-500/20"
             >
               📍 Use My Location
             </Button>
@@ -156,11 +162,11 @@ export function PrayerTimesWidget({ compact = false }: PrayerTimesWidgetProps) {
         <div className="mb-6 text-center">
           <p className="text-white font-medium">{prayerTimes.hijriDate.formatted}</p>
           <p className="text-gray-300 text-sm">
-            {prayerTimes.date.toLocaleDateString('en-US', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
+            {prayerTimes.date.toLocaleDateString("en-US", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
             })}
           </p>
         </div>
@@ -169,9 +175,13 @@ export function PrayerTimesWidget({ compact = false }: PrayerTimesWidgetProps) {
         {islamicEvents.length > 0 && (
           <div className="mb-6">
             <div className="bg-green-600/20 border border-green-500/30 rounded-lg p-3">
-              <p className="text-green-300 font-medium text-sm mb-1">Today's Events:</p>
+              <p className="text-green-300 font-medium text-sm mb-1">
+                Today's Events:
+              </p>
               {islamicEvents.map((event, index) => (
-                <p key={index} className="text-green-200 text-sm">{event}</p>
+                <p key={index} className="text-green-200 text-sm">
+                  {event}
+                </p>
               ))}
             </div>
           </div>
@@ -179,20 +189,25 @@ export function PrayerTimesWidget({ compact = false }: PrayerTimesWidgetProps) {
 
         {/* Next Prayer Highlight */}
         <div className="mb-6">
-          <div className="bg-purple-600/30 border border-purple-400/50 rounded-lg p-4 text-center">
-            <p className="text-purple-200 text-sm mb-1">Next Prayer</p>
-            <p className="text-white text-xl font-bold">{prayerTimes.nextPrayer.name}</p>
-            <p className="text-purple-200">
+          <div className="bg-green-600/30 border border-green-400/50 rounded-lg p-4 text-center">
+            <p className="text-green-200 text-sm mb-1">Next Prayer</p>
+            <p className="text-white text-xl font-bold">
+              {prayerTimes.nextPrayer.name}
+            </p>
+            <p className="text-green-200">
               {formatPrayerTime(prayerTimes.nextPrayer.time)}
             </p>
-            <p className="text-purple-300 text-sm">in {prayerTimes.nextPrayer.timeUntil}</p>
+            <p className="text-green-300 text-sm">
+              in {prayerTimes.nextPrayer.timeUntil}
+            </p>
           </div>
         </div>
 
         {/* All Prayer Times */}
         <div className="grid grid-cols-2 gap-3 mb-6">
           {Object.entries(prayerTimes.prayers).map(([prayer, time]) => {
-            const isNext = prayer.toLowerCase() === prayerTimes.nextPrayer.name.toLowerCase();
+            const isNext =
+              prayer.toLowerCase() === prayerTimes.nextPrayer.name.toLowerCase();
             const isPassed = time < new Date();
 
             return (
@@ -200,20 +215,32 @@ export function PrayerTimesWidget({ compact = false }: PrayerTimesWidgetProps) {
                 key={prayer}
                 className={`p-3 rounded-lg text-center ${
                   isNext
-                    ? 'bg-purple-600/40 border border-purple-400/50'
+                    ? "bg-green-600/40 border border-green-400/50"
                     : isPassed
-                    ? 'bg-gray-600/20 border border-gray-500/30'
-                    : 'bg-purple-800/20 border border-purple-600/30'
+                    ? "bg-gray-600/20 border border-gray-500/30"
+                    : "bg-green-800/20 border border-green-600/30"
                 }`}
               >
-                <p className={`font-medium capitalize ${
-                  isNext ? 'text-white' : isPassed ? 'text-gray-400' : 'text-purple-200'
-                }`}>
+                <p
+                  className={`font-medium capitalize ${
+                    isNext
+                      ? "text-white"
+                      : isPassed
+                      ? "text-gray-400"
+                      : "text-green-200"
+                  }`}
+                >
                   {prayer}
                 </p>
-                <p className={`text-sm ${
-                  isNext ? 'text-purple-100' : isPassed ? 'text-gray-500' : 'text-gray-300'
-                }`}>
+                <p
+                  className={`text-sm ${
+                    isNext
+                      ? "text-green-100"
+                      : isPassed
+                      ? "text-gray-500"
+                      : "text-gray-300"
+                  }`}
+                >
                   {formatPrayerTime(time)}
                 </p>
               </div>
@@ -227,7 +254,7 @@ export function PrayerTimesWidget({ compact = false }: PrayerTimesWidgetProps) {
             onClick={loadPrayerTimes}
             variant="ghost"
             size="sm"
-            className="text-purple-300 hover:text-white text-xs"
+            className="text-green-300 hover:text-white text-xs"
             disabled={loading}
           >
             🔄 Refresh Times
@@ -240,7 +267,10 @@ export function PrayerTimesWidget({ compact = false }: PrayerTimesWidgetProps) {
 
 // Simple prayer time indicator for headers
 export function NextPrayerIndicator() {
-  const [nextPrayer, setNextPrayer] = useState<{ name: string; timeUntil: string } | null>(null);
+  const [nextPrayer, setNextPrayer] = useState<{
+    name: string;
+    timeUntil: string;
+  } | null>(null);
 
   useEffect(() => {
     const loadNext = async () => {
@@ -249,15 +279,15 @@ export function NextPrayerIndicator() {
         const times = await getPrayerTimes(location);
         setNextPrayer({
           name: times.nextPrayer.name,
-          timeUntil: times.nextPrayer.timeUntil
+          timeUntil: times.nextPrayer.timeUntil,
         });
       } catch (error) {
-        console.error('Failed to load next prayer:', error);
+        console.error("Failed to load next prayer:", error);
       }
     };
 
     loadNext();
-    const interval = setInterval(loadNext, 60 * 1000); // Update every minute
+    const interval = setInterval(loadNext, 60 * 1000);
     return () => clearInterval(interval);
   }, []);
 

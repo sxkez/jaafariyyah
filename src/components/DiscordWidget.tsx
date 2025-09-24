@@ -1,24 +1,29 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { getDiscordStats, formatActivity, type DiscordServerStats } from '@/services/discordService';
+import { useState, useEffect } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  getDiscordStats,
+  formatActivity,
+  type DiscordServerStats,
+} from "@/services/discordService";
 
 interface DiscordWidgetProps {
   compact?: boolean;
   showActivity?: boolean;
 }
 
-export function DiscordWidget({ compact = false, showActivity = true }: DiscordWidgetProps) {
+export function DiscordWidget({
+  compact = false,
+  showActivity = true,
+}: DiscordWidgetProps) {
   const [stats, setStats] = useState<DiscordServerStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     loadStats();
-
-    // Update stats every 5 minutes
     const interval = setInterval(loadStats, 5 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
@@ -30,8 +35,8 @@ export function DiscordWidget({ compact = false, showActivity = true }: DiscordW
       setStats(data);
       setError(null);
     } catch (err) {
-      setError('Failed to load Discord stats');
-      console.error('Discord stats error:', err);
+      setError("Failed to load Discord stats");
+      console.error("Discord stats error:", err);
     } finally {
       setLoading(false);
     }
@@ -40,16 +45,16 @@ export function DiscordWidget({ compact = false, showActivity = true }: DiscordW
   const handleJoinDiscord = () => {
     const inviteUrl = stats?.serverInfo.inviteCode
       ? `https://discord.gg/${stats.serverInfo.inviteCode}`
-      : 'https://discord.gg/hanafiyya';
-    window.open(inviteUrl, '_blank', 'noopener,noreferrer');
+      : "https://discord.gg/jafariyya";
+    window.open(inviteUrl, "_blank", "noopener,noreferrer");
   };
 
   if (loading) {
     return (
-      <Card className="bg-purple-900/30 border-purple-600/30 backdrop-blur-sm">
+      <Card className="bg-green-950/30 border-green-700/40 backdrop-blur-sm">
         <CardContent className="p-6">
           <div className="flex items-center justify-center">
-            <div className="animate-spin w-6 h-6 border-2 border-purple-600 border-t-transparent rounded-full"></div>
+            <div className="animate-spin w-6 h-6 border-2 border-green-500 border-t-transparent rounded-full"></div>
             <span className="ml-3 text-gray-300">Loading Discord stats...</span>
           </div>
         </CardContent>
@@ -59,15 +64,19 @@ export function DiscordWidget({ compact = false, showActivity = true }: DiscordW
 
   if (error || !stats) {
     return (
-      <Card className="bg-purple-900/30 border-purple-600/30 backdrop-blur-sm">
+      <Card className="bg-green-950/30 border-green-700/40 backdrop-blur-sm">
         <CardContent className="p-6">
           <div className="text-center">
             <div className="text-4xl mb-2">👥</div>
-            <h3 className="text-lg font-semibold text-white mb-2">Join Our Discord</h3>
-            <p className="text-gray-300 text-sm mb-4">Connect with fellow scholars</p>
+            <h3 className="text-lg font-semibold text-white mb-2">
+              Join Our Discord
+            </h3>
+            <p className="text-gray-300 text-sm mb-4">
+              Connect with fellow seekers of knowledge
+            </p>
             <Button
               onClick={handleJoinDiscord}
-              className="bg-purple-600 hover:bg-purple-700 text-white"
+              className="bg-green-600 hover:bg-green-700 text-white"
             >
               Join Community
             </Button>
@@ -79,15 +88,17 @@ export function DiscordWidget({ compact = false, showActivity = true }: DiscordW
 
   if (compact) {
     return (
-      <Card className="bg-purple-900/30 border-purple-600/30 backdrop-blur-sm">
+      <Card className="bg-green-950/30 border-green-700/40 backdrop-blur-sm">
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center">
                 <span className="text-white text-sm">☪</span>
               </div>
               <div>
-                <p className="text-white font-semibold">{stats.serverInfo.name}</p>
+                <p className="text-white font-semibold">
+                  {stats.serverInfo.name}
+                </p>
                 <p className="text-green-400 text-sm">
                   {stats.onlineCount} online • {stats.memberCount} members
                 </p>
@@ -96,7 +107,7 @@ export function DiscordWidget({ compact = false, showActivity = true }: DiscordW
             <Button
               onClick={handleJoinDiscord}
               size="sm"
-              className="bg-purple-600 hover:bg-purple-700 text-white"
+              className="bg-green-600 hover:bg-green-700 text-white"
             >
               Join
             </Button>
@@ -107,25 +118,31 @@ export function DiscordWidget({ compact = false, showActivity = true }: DiscordW
   }
 
   return (
-    <Card className="bg-purple-900/30 border-purple-600/30 backdrop-blur-sm">
+    <Card className="bg-green-950/30 border-green-700/40 backdrop-blur-sm">
       <CardContent className="p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center border border-purple-300">
+            <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-700 rounded-full flex items-center justify-center border border-green-400">
               <span className="text-white">☪</span>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-white">{stats.serverInfo.name}</h3>
-              <p className="text-purple-200 text-sm">Discord Community</p>
+              <h3 className="text-lg font-semibold text-white">
+                {stats.serverInfo.name}
+              </h3>
+              <p className="text-green-200 text-sm">Discord Community</p>
             </div>
           </div>
           <div className="text-right">
             <div className="flex items-center gap-2 mb-1">
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              <span className="text-green-400 font-semibold">{stats.onlineCount} online</span>
+              <span className="text-green-400 font-semibold">
+                {stats.onlineCount} online
+              </span>
             </div>
-            <p className="text-gray-300 text-sm">{stats.memberCount} total members</p>
+            <p className="text-gray-300 text-sm">
+              {stats.memberCount} total members
+            </p>
           </div>
         </div>
 
@@ -138,7 +155,10 @@ export function DiscordWidget({ compact = false, showActivity = true }: DiscordW
             </h4>
             <div className="space-y-2 max-h-32 overflow-y-auto">
               {stats.recentActivity.slice(0, 4).map((activity) => (
-                <div key={activity.id} className="text-gray-300 text-sm bg-purple-800/20 rounded p-2">
+                <div
+                  key={activity.id}
+                  className="text-gray-300 text-sm bg-green-900/20 rounded p-2"
+                >
                   <p>{formatActivity(activity)}</p>
                   {activity.content && (
                     <p className="text-gray-400 text-xs mt-1 italic">
@@ -154,7 +174,7 @@ export function DiscordWidget({ compact = false, showActivity = true }: DiscordW
         {/* Join Button */}
         <Button
           onClick={handleJoinDiscord}
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3"
+          className="w-full bg-green-600 hover:bg-green-700 text-white py-3"
         >
           👥 Join Our Discord Community
         </Button>
@@ -165,7 +185,7 @@ export function DiscordWidget({ compact = false, showActivity = true }: DiscordW
             onClick={loadStats}
             variant="ghost"
             size="sm"
-            className="text-purple-300 hover:text-white text-xs"
+            className="text-green-300 hover:text-white text-xs"
             disabled={loading}
           >
             🔄 Refresh Stats
@@ -176,7 +196,7 @@ export function DiscordWidget({ compact = false, showActivity = true }: DiscordW
   );
 }
 
-// Compact Discord status indicator for headers/sidebars
+// Compact Discord status indicator
 export function DiscordStatus() {
   const [stats, setStats] = useState<DiscordServerStats | null>(null);
 

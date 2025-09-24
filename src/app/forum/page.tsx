@@ -47,11 +47,11 @@ const forumCategories = [
 const samplePosts: ForumPost[] = [
   {
     id: '1',
-    title: 'Proofs for Imāmah after Ghadīr: What are your go‑to sources?',
+    title: 'Proofs for Imāmah after Ghadīr: What are your go-to sources?',
     author: 'Zayn_Student',
-    authorAvatar: 'https://ui-avatars.com/api/?name=Zayn+Student&background=7c3aed&color=fff',
+    authorAvatar: 'https://ui-avatars.com/api/?name=Zayn+Student&background=065f46&color=fff',
     content:
-      'Salām everyone. Beyond the famous khutbah of Ghadīr, which narrations and works do you cite first when explaining Imāmah to newcomers? Do you prefer primary ḥadīth citations (e.g., al‑Kāfī) or thematic works (e.g., al‑Mufīd, al‑‘Allāma)? Share what resonates most in da‘wah and study circles.',
+      'Salām everyone. Beyond the famous khutbah of Ghadīr, which narrations and works do you cite first when explaining Imāmah to newcomers? Do you prefer primary ḥadīth citations (e.g., al-Kāfī) or thematic works (e.g., al-Mufīd, al-‘Allāma)? Share what resonates most in da‘wah and study circles.',
     category: 'aqidah',
     tags: ['Imāmah', 'Ghadīr', 'Dalīl'],
     timestamp: new Date(Date.now() - 1000 * 60 * 30),
@@ -65,7 +65,7 @@ const samplePosts: ForumPost[] = [
     id: '2',
     title: 'Beginner pathway in Ja‘farī fiqh (ṭahārah → ṣalāh → ṣawm)',
     author: 'FatimaH',
-    authorAvatar: 'https://ui-avatars.com/api/?name=Fatima+H&background=059669&color=fff',
+    authorAvatar: 'https://ui-avatars.com/api/?name=Fatima+H&background=047857&color=fff',
     content:
       'Looking for a sequenced study path: which primers for ṭahārah and ṣalāh are best before moving to siyām and khums? Also, tips on using your marja‘’s risālah effectively.',
     category: 'fiqh',
@@ -83,7 +83,7 @@ const samplePosts: ForumPost[] = [
     author: 'RijalNotes',
     authorAvatar: 'https://ui-avatars.com/api/?name=Rijal+Notes&background=dc2626&color=fff',
     content:
-      'Working through differing wordings on washing limbs vs. masḥ sequence. Which rijāl and fiqh sources do you consult first for tarjīḥ? Any notes on Shaykh al‑Ṭūsī’s approach in Tahdhīb/Istibṣār?',
+      'Working through differing wordings on washing limbs vs. masḥ sequence. Which rijāl and fiqh sources do you consult first for tarjīḥ? Any notes on Shaykh al-Ṭūsī’s approach in Tahdhīb/Istibṣār?',
     category: 'hadith',
     tags: ['Rijāl', 'Tarjīḥ', 'Wudūʾ'],
     timestamp: new Date(Date.now() - 1000 * 60 * 60 * 4),
@@ -95,11 +95,11 @@ const samplePosts: ForumPost[] = [
   },
   {
     id: '4',
-    title: 'Weekly Arabic Circle: Ajurrūmiyya — al‑Mubtadaʾ wa‑l‑Khabar',
+    title: 'Weekly Arabic Circle: Ajurrūmiyya — al-Mubtadaʾ wa-l-Khabar',
     author: 'ArabicTeacher',
-    authorAvatar: 'https://ui-avatars.com/api/?name=Arabic+Teacher&background=7c2d12&color=fff',
+    authorAvatar: 'https://ui-avatars.com/api/?name=Arabic+Teacher&background=14532d&color=fff',
     content:
-      'This week we tackle mubtadaʾ/khabar, with practice parsing examples from Nahj al‑Balāgha and al‑Ṣaḥīfa al‑Sajjādiyya. Bring your favorite sentences to parse!',
+      'This week we tackle mubtadaʾ/khabar, with practice parsing examples from Nahj al-Balāgha and al-Ṣaḥīfa al-Sajjādiyya. Bring your favorite sentences to parse!',
     category: 'arabic',
     tags: ['Arabic', 'Grammar', 'Ajurrūmiyya'],
     timestamp: new Date(Date.now() - 1000 * 60 * 60 * 6),
@@ -132,7 +132,7 @@ function PostCard({ post, onLike, onReply }: {
   };
 
   return (
-    <Card className="bg-purple-900/30 border-purple-600/30 backdrop-blur-sm hover:bg-purple-900/40 transition-all duration-300">
+    <Card className="bg-green-900/30 border-green-700/30 backdrop-blur-sm hover:bg-green-900/40 transition-all duration-300">
       <CardContent className="p-6">
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
@@ -140,13 +140,13 @@ function PostCard({ post, onLike, onReply }: {
             {post.isPinned && <span className="text-yellow-400 text-sm">📌</span>}
             <img src={post.authorAvatar} alt={post.author} className="w-10 h-10 rounded-full" />
             <div>
-              <h3 className="text-white font-semibold text-lg hover:text-purple-300 cursor-pointer">{post.title}</h3>
+              <h3 className="text-white font-semibold text-lg hover:text-green-300 cursor-pointer">{post.title}</h3>
               <div className="flex items-center gap-2 text-sm text-gray-400">
                 <span>by {post.author}</span>
                 <span>•</span>
                 <span>{formatTimeAgo(post.timestamp)}</span>
                 <span>•</span>
-                <span className="bg-purple-600/40 text-purple-200 px-2 py-1 rounded text-xs">
+                <span className="bg-green-700/40 text-green-200 px-2 py-1 rounded text-xs">
                   {forumCategories.find(c => c.id === post.category)?.name}
                 </span>
               </div>
@@ -162,7 +162,7 @@ function PostCard({ post, onLike, onReply }: {
         {/* Tags */}
         <div className="flex flex-wrap gap-2 mb-4">
           {post.tags.map((tag) => (
-            <span key={tag} className="bg-purple-600/20 text-purple-300 text-xs px-2 py-1 rounded hover:bg-purple-600/30 cursor-pointer">
+            <span key={tag} className="bg-green-700/20 text-green-300 text-xs px-2 py-1 rounded hover:bg-green-700/30 cursor-pointer">
               #{tag}
             </span>
           ))}
@@ -175,7 +175,7 @@ function PostCard({ post, onLike, onReply }: {
               variant="ghost"
               size="sm"
               onClick={() => onLike(post.id)}
-              className={`text-sm ${post.isLiked ? 'text-red-400 hover:text-red-300' : 'text-gray-400 hover:text-white'}`}
+              className={`text-sm ${post.isLiked ? 'text-red-500 hover:text-red-400' : 'text-gray-400 hover:text-white'}`}
             >
               {post.isLiked ? '❤️' : '🤍'} {post.likes}
             </Button>
@@ -197,7 +197,7 @@ function PostCard({ post, onLike, onReply }: {
               variant="outline"
               size="sm"
               onClick={() => onReply(post.id)}
-              className="border-purple-400 text-purple-300 hover:bg-purple-500/20"
+              className="border-green-400 text-green-300 hover:bg-green-500/20"
             >
               Reply
             </Button>
@@ -245,13 +245,13 @@ export default function ForumPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-950 via-indigo-950 to-blue-950">
+    <div className="min-h-screen bg-gradient-to-br from-green-950 via-gray-900 to-black">
       <div className="container mx-auto px-6 py-8">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Community Forum</h1>
           <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-            Ask, share, and learn together — centered on the Qur’an, Sunnah, and the teachings of the Ahl al‑Bayt (a).
+            Ask, share, and learn together — centered on the Qur’an, Sunnah, and the teachings of the Ahl al-Bayt (a).
           </p>
         </div>
 
@@ -263,11 +263,11 @@ export default function ForumPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search discussions, topics, or tags..."
-              className="w-full px-4 py-3 bg-purple-900/30 border border-purple-600/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-400"
+              className="w-full px-4 py-3 bg-green-900/30 border border-green-700/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-green-400"
             />
           </div>
           {isAuthenticated && (
-            <Button onClick={() => setShowNewPostModal(true)} className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3">
+            <Button onClick={() => setShowNewPostModal(true)} className="bg-green-600 hover:bg-green-700 text-white px-6 py-3">
               ✍️ Start Discussion
             </Button>
           )}
@@ -281,7 +281,7 @@ export default function ForumPage() {
               variant={activeCategory === category.id ? 'default' : 'outline'}
               size="sm"
               onClick={() => setActiveCategory(category.id)}
-              className={activeCategory === category.id ? 'bg-purple-600 hover:bg-purple-700 text-white' : 'border-purple-400 text-purple-300 hover:bg-purple-500/20'}
+              className={activeCategory === category.id ? 'bg-green-600 hover:bg-green-700 text-white' : 'border-green-400 text-green-300 hover:bg-green-500/20'}
             >
               {category.icon} {category.name}
             </Button>
@@ -295,7 +295,7 @@ export default function ForumPage() {
               <div className="text-6xl mb-4">💬</div>
               <h3 className="text-2xl font-bold text-white mb-2">No discussions found</h3>
               <p className="text-gray-300 mb-6">{searchQuery ? 'Try adjusting your search' : 'Be the first to start a discussion!'}</p>
-              {isAuthenticated && <Button onClick={() => setShowNewPostModal(true)} className="bg-purple-600 hover:bg-purple-700">Start New Discussion</Button>}
+              {isAuthenticated && <Button onClick={() => setShowNewPostModal(true)} className="bg-green-600 hover:bg-green-700">Start New Discussion</Button>}
             </div>
           ) : (
             filteredPosts.map((post) => <PostCard key={post.id} post={post} onLike={handleLike} onReply={handleReply} />)
@@ -304,22 +304,22 @@ export default function ForumPage() {
 
         {/* Login Prompt */}
         {!isAuthenticated && (
-          <div className="text-center mt-12 p-8 bg-purple-900/30 border border-purple-600/30 rounded-lg">
+          <div className="text-center mt-12 p-8 bg-green-900/30 border border-green-700/30 rounded-lg">
             <h3 className="text-xl font-bold text-white mb-4">Join the Discussion</h3>
             <p className="text-gray-300 mb-6">Login to participate in discussions, ask questions, and share your knowledge</p>
-            <Button className="bg-purple-600 hover:bg-purple-700 text-white">Login / Sign Up</Button>
+            <Button className="bg-green-600 hover:bg-green-700 text-white">Login / Sign Up</Button>
           </div>
         )}
 
         {/* Footer */}
-        <div className="text-center mt-16 pt-8 border-t border-purple-600/30">
+        <div className="text-center mt-16 pt-8 border-t border-green-700/30">
           <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center border border-purple-300">
+            <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center border border-green-300">
               <div className="text-white text-xs">☪</div>
             </div>
             <span className="text-white font-semibold text-lg">𝘼𝙡 𝙅𝙖‘𝙛𝙖𝙧𝙞𝙮𝙮𝙖</span>
           </div>
-          <p className="text-gray-300 italic">“May Allah have mercy on the one who revives our affair.” — Imām Ja‘far al‑Ṣādiq (a)</p>
+          <p className="text-gray-300 italic">“May Allah have mercy on the one who revives our affair.” — Imām Ja‘far al-Ṣādiq (a)</p>
         </div>
       </div>
     </div>
