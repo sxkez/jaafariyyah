@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     siteName: "Al Ja‘fariyya",
     images: [
       {
-        url: "https://ext.same-assets.com/4138622892/og-jafariyya.png",
+        url: "https://imgur.com/a/ySl8qpG",
         width: 1200,
         height: 630,
         alt: "Al Ja‘fariyya Logo",
