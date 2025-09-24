@@ -81,7 +81,7 @@ function VideoPlayerModal({
 
   return (
     <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-      <div className="bg-purple-900/90 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-auto">
+      <div className="bg-green-900/90 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-auto">
         <div className="p-6">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold text-white">
@@ -91,7 +91,7 @@ function VideoPlayerModal({
               onClick={onClose}
               variant="ghost"
               size="sm"
-              className="text-white hover:bg-purple-800"
+              className="text-white hover:bg-green-800"
             >
               ✕
             </Button>
@@ -111,7 +111,7 @@ function VideoPlayerModal({
             <h3 className="text-lg font-semibold text-white mb-2">
               {playlist.titleEnglish || playlist.title}
             </h3>
-            <p className="text-purple-200 text-sm mb-2">
+            <p className="text-green-200 text-sm mb-2">
               Teacher: {playlist.teacher}
             </p>
             <p className="text-gray-300 text-sm">{playlist.description}</p>
@@ -132,7 +132,7 @@ function PlaylistCard({ playlist }: { playlist: typeof samplePlaylists[0] }) {
 
   return (
     <>
-      <Card className="bg-purple-900/30 border-purple-600/30 backdrop-blur-sm hover:bg-purple-900/40 transition-all duration-300 overflow-hidden">
+      <Card className="bg-green-900/30 border-green-600/30 backdrop-blur-sm hover:bg-green-900/40 transition-all duration-300 overflow-hidden">
         <CardContent className="p-0">
           <div className="grid md:grid-cols-2 gap-0">
             {/* Thumbnail */}
@@ -151,7 +151,7 @@ function PlaylistCard({ playlist }: { playlist: typeof samplePlaylists[0] }) {
                 </div>
               </div>
               <div className="absolute top-2 left-2">
-                <span className="bg-purple-600 text-white text-xs px-2 py-1 rounded">
+                <span className="bg-green-600 text-white text-xs px-2 py-1 rounded">
                   {selectedLanguage}
                 </span>
               </div>
@@ -165,7 +165,7 @@ function PlaylistCard({ playlist }: { playlist: typeof samplePlaylists[0] }) {
             {/* Info */}
             <div className="p-6">
               <div className="flex items-center gap-2 mb-3">
-                <span className="bg-purple-600/40 text-purple-200 text-xs px-2 py-1 rounded">
+                <span className="bg-green-600/40 text-green-200 text-xs px-2 py-1 rounded">
                   {playlist.category}
                 </span>
                 <span className="text-gray-400 text-xs">
@@ -177,11 +177,11 @@ function PlaylistCard({ playlist }: { playlist: typeof samplePlaylists[0] }) {
                 {playlist.title}
               </h3>
               {(playlist.titleEnglish || playlist.titleArabic) && (
-                <h4 className="text-purple-300 text-sm mb-3">
+                <h4 className="text-green-300 text-sm mb-3">
                   {playlist.titleEnglish || playlist.titleArabic}
                 </h4>
               )}
-              <p className="text-purple-200 text-sm mb-3">
+              <p className="text-green-200 text-sm mb-3">
                 {playlist.teacher}
               </p>
               <p className="text-gray-300 text-sm mb-4 line-clamp-3">
@@ -214,7 +214,7 @@ function PlaylistCard({ playlist }: { playlist: typeof samplePlaylists[0] }) {
                 <select
                   value={selectedEpisode}
                   onChange={(e) => setSelectedEpisode(Number(e.target.value))}
-                  className="w-full bg-purple-900/30 border border-purple-600/30 rounded text-white text-sm py-2 px-3 focus:outline-none focus:border-purple-400"
+                  className="w-full bg-green-900/30 border border-green-600/30 rounded text-white text-sm py-2 px-3 focus:outline-none focus:border-green-400"
                 >
                   {Array.from({ length: playlist.episodes }, (_, i) => (
                     <option key={i + 1} value={i + 1}>
@@ -227,7 +227,7 @@ function PlaylistCard({ playlist }: { playlist: typeof samplePlaylists[0] }) {
               <Button
                 size="sm"
                 onClick={handleWatch}
-                className="bg-purple-600 hover:bg-purple-700 text-white w-full"
+                className="bg-green-600 hover:bg-green-700 text-white w-full"
               >
                 ▶ Watch Now
               </Button>
@@ -250,7 +250,7 @@ function PlaylistCard({ playlist }: { playlist: typeof samplePlaylists[0] }) {
 // 📚 Main Videos Page
 export default function VideosPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-950 via-indigo-950 to-blue-950">
+    <div className="min-h-screen bg-gradient-to-br from-green-950 via-emerald-950 to-teal-950">
       <div className="container mx-auto px-6 py-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -270,9 +270,9 @@ export default function VideosPage() {
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-16 pt-8 border-t border-purple-600/30">
+        <div className="text-center mt-16 pt-8 border-t border-green-600/30">
           <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center border border-purple-300">
+            <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center border border-green-300">
               <div className="text-white text-xs">☪</div>
             </div>
             <span className="text-white font-semibold text-lg">
@@ -287,21 +287,21 @@ export default function VideosPage() {
             <Button
               variant="ghost"
               size="sm"
-              className="text-purple-300 hover:text-white"
+              className="text-green-300 hover:text-white"
             >
               Discord
             </Button>
             <Button
               variant="ghost"
               size="sm"
-              className="text-purple-300 hover:text-white"
+              className="text-green-300 hover:text-white"
             >
               TikTok
             </Button>
             <Button
               variant="ghost"
               size="sm"
-              className="text-purple-300 hover:text-white"
+              className="text-green-300 hover:text-white"
             >
               Instagram
             </Button>
