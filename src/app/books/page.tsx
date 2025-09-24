@@ -18,9 +18,9 @@ const sampleBooks = [
     rating: 5,
     tags: ["Hadith", "Ahl al-Bayt", "Classical"],
     language: "AR/EN",
-    cover: "https://ext.same-assets.com/4138622892/4100104001.png",
+    cover: "https://images.arabicbookshop.net/132-313.jpg",
     category: "hadith",
-    pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+    pdfUrl: "https://dn720003.ca.archive.org/0/items/20210905_20210905_1356/%20%20%D8%A7%D9%84%D9%83%D8%A7%D9%81%D9%8A.pdf"
   },
   {
     id: 2,
@@ -32,9 +32,9 @@ const sampleBooks = [
     rating: 5,
     tags: ["Ethics", "Theology", "Sermons"],
     language: "AR/EN",
-    cover: "https://ext.same-assets.com/4138622892/4100104002.png",
+    cover: "https://arabicbookslondon.com/wp-content/uploads/2015/07/ABL786000015_Sharh-Nahj-al-Balaghah-e1437388044196-scaled.jpg",
     category: "creed",
-    pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+    pdfUrl: "https://ia902801.us.archive.org/6/items/Nahjul-Balagha/NahjulBalaghavol.1-TranslatedByYasinAlJibouri.pdf"
   },
   {
     id: 3,
@@ -46,9 +46,9 @@ const sampleBooks = [
     rating: 5,
     tags: ["Du‘ā’", "Spirituality", "Devotion"],
     language: "AR/EN",
-    cover: "https://ext.same-assets.com/4138622892/4100104003.png",
+    cover: "https://www.shiabooks99p.com/wp-content/uploads/2022/05/m_Al-sahifat-Al-Sajjadiyya-Copy.jpg",
     category: "creed",
-    pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+    pdfUrl: "https://www.duas.org/pdfs/Sahifa-Sajjadiya-simple-english.pdf"
   },
   {
     id: 4,
@@ -60,9 +60,9 @@ const sampleBooks = [
     rating: 5,
     tags: ["Hadith", "Fiqh", "Classical"],
     language: "AR",
-    cover: "https://ext.same-assets.com/4138622892/4100104004.png",
+    cover: "https://almurtaza.co.uk/wp-content/uploads/2016/02/00350-1.jpg",
     category: "jurisprudence",
-    pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+    pdfUrl: "https://alkarbala.org/team/uploads/Man%20La%20Yahduruhu%20Al%20Faqih%20Vol.1.pdf"
   },
   {
     id: 5,
@@ -74,9 +74,9 @@ const sampleBooks = [
     rating: 5,
     tags: ["Hadith", "Fiqh", "Ja‘farī"],
     language: "AR",
-    cover: "https://ext.same-assets.com/4138622892/4100104005.png",
+    cover: "https://commons.wikishia.net/w/images/c/c5/%D8%AA%D9%87%D8%B0%DB%8C%D8%A8%E2%80%8C%D8%A7%D9%84%D8%A7%D8%AD%DA%A9%D8%A7%D9%85.jpg",
     category: "jurisprudence",
-    pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+    pdfUrl: "https://dn721908.ca.archive.org/0/items/umairastro90_yahoo_05_201905/%D8%AA%D9%87%D8%B0%D9%8A%D8%A8%20%D8%A7%D9%84%D8%A3%D8%AD%D9%83%D8%A7%D9%85%20%D9%81%D9%8A%20%D8%B4%D8%B1%D8%AD%20%D8%A7%D9%84%D9%85%D9%82%D9%86%D8%B9%D8%A9%20-%20%D8%B4%D9%8A%D8%AE%20%D8%A7%D9%84%D8%B7%D8%A7%D8%A6%D9%81%D8%A9%20%D9%85%D8%AD%D9%85%D8%AF%20%D8%A8%D9%86%20%D8%A7%D9%84%D8%AD%D8%B3%D9%86%20%D8%A7%D9%84%D8%B7%D9%88%D8%B3%D9%8A%20-%20%D8%AC01.pdf"
   },
   {
     id: 6,
