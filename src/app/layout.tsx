@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "𝘼𝙡 𝙅𝙖‘𝙛𝙖𝙧𝙞𝙮𝙮𝙖 (الجعفرية)",
   description:
-    "Where the light of Ja‘farī (Twelver Shi‘i) scholarship meets the inquisitive heart.",
+    "Ja‘farī (Twelver Shi‘i) scholarship that meets the inquisitive heart.",
   openGraph: {
     title: "Al Ja‘fariyya – Twelver Shi‘i Community",
     description:

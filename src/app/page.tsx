@@ -51,11 +51,8 @@ function HeroSection() {
   return (
     <section className="relative z-10 text-center px-6 py-20">
       <h1 className="text-6xl md:text-7xl font-bold text-white mb-4 leading-tight">
-        Welcome to
+        Al Ja'fariyyah
       </h1>
-      <h2 className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-purple-300 via-blue-300 to-purple-300 bg-clip-text text-transparent mb-8 leading-tight">
-        Al Ja‘fariyya
-      </h2>
       <p className="text-xl text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed">
         Where the light of Ja‘farī (Twelver Shi‘i) scholarship meets the inquisitive heart.
         Learn, share, and connect around the Qur’an, the Sunnah of the Prophet ﷺ, and the teachings

@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { PDFViewer } from "@/components/PDFViewer";
 import { BookRecommendationsWidget } from "@/components/BookRecommendationsWidget";
 
-// Twelver Shi'i book data (covers use your existing asset CDN; PDF links are working placeholders)
+// 📚 Your full sampleBooks stays exactly as you had it
 const sampleBooks = [
   {
     id: 1,
@@ -14,9 +14,9 @@ const sampleBooks = [
     titleArabic: "الكافي – أصول الكافي",
     author: "Shaykh al-Kulaynī (d. 329 AH)",
     description:
-      "Foundational ḥadīth collection of Twelver Shi‘ism. Uṣūl covers creed, virtue, and ethics transmitted from the Ahl al‑Bayt (a).",
+      "Foundational ḥadīth collection of Twelver Shi‘ism. Uṣūl covers creed, virtue, and ethics transmitted from the Ahl al-Bayt (a).",
     rating: 5,
-    tags: ["Hadith", "Ahl al‑Bayt", "Classical"],
+    tags: ["Hadith", "Ahl al-Bayt", "Classical"],
     language: "AR/EN",
     cover: "https://ext.same-assets.com/4138622892/4100104001.png",
     category: "hadith",
@@ -24,9 +24,9 @@ const sampleBooks = [
   },
   {
     id: 2,
-    title: "Nahj al‑Balāgha",
+    title: "Nahj al-Balāgha",
     titleArabic: "نهج البلاغة",
-    author: "Sharīf al‑Raḍī (comp.)",
+    author: "Sharīf al-Raḍī (comp.)",
     description:
       "Sermons, letters, and aphorisms of Imām ‘Alī (a), central to Shi‘i ethics, theology, and eloquence.",
     rating: 5,
@@ -38,9 +38,9 @@ const sampleBooks = [
   },
   {
     id: 3,
-    title: "Al‑Ṣaḥīfa al‑Sajjādiyya",
+    title: "Al-Ṣaḥīfa al-Sajjādiyya",
     titleArabic: "الصحيفة السجادية",
-    author: "Imām ‘Alī Zayn al‑‘Ābidīn (a)",
+    author: "Imām ‘Alī Zayn al-‘Ābidīn (a)",
     description:
       "A devotional masterpiece of supplications that shape Shi‘i spirituality and akhlāq.",
     rating: 5,
@@ -52,9 +52,9 @@ const sampleBooks = [
   },
   {
     id: 4,
-    title: "Man Lā Yaḥḍuruhu al‑Faqīh",
+    title: "Man Lā Yaḥḍuruhu al-Faqīh",
     titleArabic: "من لا يحضره الفقيه",
-    author: "Shaykh al‑Ṣadūq (d. 381 AH)",
+    author: "Shaykh al-Ṣadūq (d. 381 AH)",
     description:
       "One of the Four Books of Shi‘i ḥadīth focusing on practical rulings and everyday jurisprudence.",
     rating: 5,
@@ -66,9 +66,9 @@ const sampleBooks = [
   },
   {
     id: 5,
-    title: "Tahdhīb al‑Aḥkām",
+    title: "Tahdhīb al-Aḥkām",
     titleArabic: "تهذيب الأحكام",
-    author: "Shaykh al‑Ṭūsī (d. 460 AH)",
+    author: "Shaykh al-Ṭūsī (d. 460 AH)",
     description:
       "Major ḥadīth compendium arranged by fiqh chapters, foundational for Ja‘farī law.",
     rating: 5,
@@ -80,9 +80,9 @@ const sampleBooks = [
   },
   {
     id: 6,
-    title: "Al‑Istibṣār",
+    title: "Al-Istibṣār",
     titleArabic: "الاستبصار",
-    author: "Shaykh al‑Ṭūsī (d. 460 AH)",
+    author: "Shaykh al-Ṭūsī (d. 460 AH)",
     description:
       "Companion to Tahdhīb, addressing apparently conflicting narrations and their reconciliation.",
     rating: 5,
@@ -94,9 +94,9 @@ const sampleBooks = [
   },
   {
     id: 7,
-    title: "‘Aqā’id al‑Ṣadūq (al‑I‘tiqādāt)",
+    title: "‘Aqā’id al-Ṣadūq (al-I‘tiqādāt)",
     titleArabic: "عقائد الصدوق / الاعتقادات",
-    author: "Shaykh al‑Ṣadūq",
+    author: "Shaykh al-Ṣadūq",
     description:
       "A concise exposition of Shi‘i creed covering tawḥīd, nubuwwa, imāma, and ma‘ād.",
     rating: 4,
@@ -108,11 +108,11 @@ const sampleBooks = [
   },
   {
     id: 8,
-    title: "Kashf al‑Murād fī Sharḥ Tajrīd al‑I‘tiqād",
+    title: "Kashf al-Murād fī Sharḥ Tajrīd al-I‘tiqād",
     titleArabic: "كشف المراد في شرح تجريد الاعتقاد",
-    author: "‘Allāma al‑Ḥillī",
+    author: "‘Allāma al-Ḥillī",
     description:
-      "A classic commentary on Naṣīr al‑Dīn al‑Ṭūsī’s Tajrīd, central to kalām in the Shi‘i tradition.",
+      "A classic commentary on Naṣīr al-Dīn al-Ṭūsī’s Tajrīd, central to kalām in the Shi‘i tradition.",
     rating: 5,
     tags: ["Kalām", "Philosophy", "Commentary"],
     language: "AR",
@@ -122,7 +122,7 @@ const sampleBooks = [
   },
   {
     id: 9,
-    title: "Tafsīr al‑Mīzān (Selections)",
+    title: "Tafsīr al-Mīzān (Selections)",
     titleArabic: "الميزان في تفسير القرآن (مختارات)",
     author: "‘Allāma Ṭabāṭabā’ī",
     description:
@@ -136,9 +136,9 @@ const sampleBooks = [
   },
   {
     id: 10,
-    title: "Mafātīḥ al‑Jinān (Selections)",
+    title: "Mafātīḥ al-Jinān (Selections)",
     titleArabic: "مفاتيح الجنان (مختارات)",
-    author: "Shaykh ‘Abbās al‑Qummī",
+    author: "Shaykh ‘Abbās al-Qummī",
     description:
       "A beloved compilation of supplications and ziyārāt used widely in devotional life.",
     rating: 5,
@@ -150,13 +150,13 @@ const sampleBooks = [
   },
   {
     id: 11,
-    title: "Farā’id al‑Uṣūl (al‑Rasā’il)",
+    title: "Farā’id al-Uṣūl (al-Rasā’il)",
     titleArabic: "فرائد الأصول (الرسائل)",
-    author: "Shaykh al‑Ansārī",
+    author: "Shaykh al-Ansārī",
     description:
-      "Monumental work in uṣūl al‑fiqh shaping modern Ja‘farī legal theory; advanced students’ staple.",
+      "Monumental work in uṣūl al-fiqh shaping modern Ja‘farī legal theory; advanced students’ staple.",
     rating: 5,
-    tags: ["Usul al‑Fiqh", "Ijtihād", "Advanced"],
+    tags: ["Usul al-Fiqh", "Ijtihād", "Advanced"],
     language: "AR",
     cover: "https://ext.same-assets.com/4138622892/4100104011.png",
     category: "usul",
@@ -164,9 +164,9 @@ const sampleBooks = [
   },
   {
     id: 12,
-    title: "Sharā’i‘ al‑Islām",
+    title: "Sharā’i‘ al-Islām",
     titleArabic: "شرائع الإسلام",
-    author: "al‑Muḥaqqiq al‑Ḥillī",
+    author: "al-Muḥaqqiq al-Ḥillī",
     description:
       "A structured manual of Ja‘farī jurisprudence; widely taught and referenced across ḥawza curricula.",
     rating: 5,
@@ -185,15 +185,20 @@ const filterTabs = [
   { id: "grammar", label: "Grammar" },
   { id: "hadith", label: "Hadith" },
   { id: "search", label: "Tafsir" },
-  { id: "usul", label: "Usul al‑Fiqh" }
+  { id: "usul", label: "Usul al-Fiqh" }
 ];
 
-// StarRating component
+// ⭐ StarRating
 function StarRating({ rating }: { rating: number }) {
   return (
     <div className="flex gap-1 mb-3">
       {[1, 2, 3, 4, 5].map((star) => (
-        <span key={star} className={`text-sm ${star <= rating ? "text-yellow-400" : "text-gray-600"}`}>
+        <span
+          key={star}
+          className={`text-sm ${
+            star <= rating ? "text-yellow-400" : "text-gray-600"
+          }`}
+        >
           ★
         </span>
       ))}
@@ -201,48 +206,66 @@ function StarRating({ rating }: { rating: number }) {
   );
 }
 
-// BookCard component
-function BookCard({ book, onRead }: { book: typeof sampleBooks[0]; onRead: (book: typeof sampleBooks[0]) => void }) {
-  const handleDownload = () => {
-    window.open(book.pdfUrl, "_blank");
-  };
-
-  const handleRead = () => {
-    onRead(book);
-  };
-
+// 📖 BookCard
+function BookCard({
+  book,
+  onRead,
+}: {
+  book: typeof sampleBooks[0];
+  onRead: (book: typeof sampleBooks[0]) => void;
+}) {
   return (
-    <Card className="bg-purple-900/30 border-purple-600/30 backdrop-blur-sm hover:bg-purple-900/40 transition-all duration-300 overflow-hidden">
+    <Card className="bg-green-900/30 border-green-600/30 backdrop-blur-sm hover:bg-green-900/40 transition-all duration-300 overflow-hidden">
       <CardContent className="p-0">
-        <div className="aspect-[3/4] bg-gradient-to-br from-purple-800/50 to-blue-800/50 relative overflow-hidden">
+        <div className="aspect-[3/4] bg-gradient-to-br from-green-800/50 to-red-800/50 relative overflow-hidden">
           <img src={book.cover} alt={book.title} className="w-full h-full object-cover" />
           <div className="absolute top-2 left-2">
-            <span className="bg-purple-600 text-white text-xs px-2 py-1 rounded">{book.language}</span>
+            <span className="bg-red-600 text-white text-xs px-2 py-1 rounded">
+              {book.language}
+            </span>
           </div>
         </div>
 
         <div className="p-4">
           <h3 className="text-white font-semibold text-lg mb-1 line-clamp-2">{book.title}</h3>
-          {book.titleArabic && <h4 className="text-purple-300 text-sm mb-2 font-arabic">{book.titleArabic}</h4>}
-          <p className="text-purple-200 text-sm mb-2">{book.author}</p>
+          {book.titleArabic && (
+            <h4 className="text-green-300 text-sm mb-2 font-arabic">
+              {book.titleArabic}
+            </h4>
+          )}
+          <p className="text-green-200 text-sm mb-2">{book.author}</p>
 
           <StarRating rating={book.rating} />
 
-          <p className="text-gray-300 text-sm mb-4 line-clamp-3">{book.description}</p>
+          <p className="text-gray-300 text-sm mb-4 line-clamp-3">
+            {book.description}
+          </p>
 
           <div className="flex flex-wrap gap-1 mb-4">
             {book.tags.map((tag) => (
-              <span key={tag} className="bg-purple-600/40 text-purple-200 text-xs px-2 py-1 rounded">
+              <span
+                key={tag}
+                className="bg-green-600/40 text-green-200 text-xs px-2 py-1 rounded"
+              >
                 {tag}
               </span>
             ))}
           </div>
 
           <div className="flex gap-2">
-            <Button size="sm" onClick={handleRead} className="bg-purple-600 hover:bg-purple-700 text-white flex-1">
+            <Button
+              size="sm"
+              onClick={() => onRead(book)}
+              className="bg-red-600 hover:bg-red-700 text-white flex-1"
+            >
               Read
             </Button>
-            <Button size="sm" variant="outline" onClick={handleDownload} className="border-purple-400 text-purple-300 hover:bg-purple-500/20 flex-1">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => window.open(book.pdfUrl, "_blank")}
+              className="border-green-400 text-green-300 hover:bg-green-500/20 flex-1"
+            >
               📥 PDF
             </Button>
           </div>
@@ -258,17 +281,6 @@ export default function BooksPage() {
   const [selectedBook, setSelectedBook] = useState<typeof sampleBooks[0] | null>(null);
   const [isPDFViewerOpen, setIsPDFViewerOpen] = useState(false);
 
-  const handleReadBook = (book: typeof sampleBooks[0]) => {
-    setSelectedBook(book);
-    setIsPDFViewerOpen(true);
-  };
-
-  const closePDFViewer = () => {
-    setIsPDFViewerOpen(false);
-    setSelectedBook(null);
-  };
-
-  // Filter and search books
   const filteredBooks = useMemo(() => {
     let filtered = sampleBooks;
 
@@ -278,29 +290,28 @@ export default function BooksPage() {
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter((book) =>
-        book.title.toLowerCase().includes(query) ||
-        book.author.toLowerCase().includes(query) ||
-        book.description.toLowerCase().includes(query) ||
-        book.tags.some((tag) => tag.toLowerCase().includes(query)) ||
-        (book.titleArabic && book.titleArabic.includes(searchQuery))
+      filtered = filtered.filter(
+        (book) =>
+          book.title.toLowerCase().includes(query) ||
+          book.author.toLowerCase().includes(query) ||
+          book.description.toLowerCase().includes(query) ||
+          book.tags.some((tag) => tag.toLowerCase().includes(query)) ||
+          (book.titleArabic && book.titleArabic.includes(searchQuery))
       );
     }
 
     return filtered;
   }, [searchQuery, activeFilter]);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-950 via-indigo-950 to-blue-950">
+    <div className="min-h-screen bg-gradient-to-br from-green-950 via-emerald-900 to-black">
       <div className="container mx-auto px-6 py-8">
         {/* Main Title */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Library</h1>
-          <p className="text-lg text-gray-300">Showing {filteredBooks.length} of {sampleBooks.length} books</p>
+          <p className="text-lg text-gray-300">
+            Showing {filteredBooks.length} of {sampleBooks.length} books
+          </p>
         </div>
 
         {/* Filter Tabs */}
@@ -311,7 +322,11 @@ export default function BooksPage() {
               variant={activeFilter === tab.id ? "default" : "outline"}
               size="sm"
               onClick={() => setActiveFilter(tab.id)}
-              className={activeFilter === tab.id ? "bg-purple-600 hover:bg-purple-700 text-white" : "border-purple-400 text-purple-300 hover:bg-purple-500/20"}
+              className={
+                activeFilter === tab.id
+                  ? "bg-red-600 hover:bg-red-700 text-white"
+                  : "border-green-400 text-green-300 hover:bg-green-500/20"
+              }
             >
               {tab.label}
             </Button>
@@ -319,16 +334,20 @@ export default function BooksPage() {
         </div>
 
         {/* Search Bar */}
-        <form onSubmit={handleSearch} className="max-w-md mx-auto mb-8">
+        <form onSubmit={(e) => e.preventDefault()} className="max-w-md mx-auto mb-8">
           <div className="relative">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by title, author, or tag..."
-              className="w-full px-4 py-3 bg-purple-900/30 border border-purple-600/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-400"
+              className="w-full px-4 py-3 bg-green-900/30 border border-green-600/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-green-400"
             />
-            <Button type="submit" size="sm" className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-purple-600 hover:bg-purple-700">
+            <Button
+              type="submit"
+              size="sm"
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-red-600 hover:bg-red-700"
+            >
               🔍
             </Button>
           </div>
@@ -340,7 +359,7 @@ export default function BooksPage() {
             currentCategory={activeFilter === "all" ? undefined : activeFilter}
             onBookSelect={(bookId) => {
               const book = sampleBooks.find((b) => b.id.toString() === bookId);
-              if (book) handleReadBook(book);
+              if (book) setSelectedBook(book), setIsPDFViewerOpen(true);
             }}
           />
         </div>
@@ -356,7 +375,7 @@ export default function BooksPage() {
                 setSearchQuery("");
                 setActiveFilter("all");
               }}
-              className="bg-purple-600 hover:bg-purple-700"
+              className="bg-red-600 hover:bg-red-700"
             >
               Clear Filters
             </Button>
@@ -364,24 +383,32 @@ export default function BooksPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredBooks.map((book) => (
-              <BookCard key={book.id} book={book} onRead={handleReadBook} />
+              <BookCard key={book.id} book={book} onRead={(b) => {setSelectedBook(b); setIsPDFViewerOpen(true);}} />
             ))}
           </div>
         )}
 
         {/* Footer */}
-        <div className="text-center mt-16 pt-8 border-t border-purple-600/30">
+        <div className="text-center mt-16 pt-8 border-t border-green-600/30">
           <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center border border-purple-300">
+            <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-red-500 rounded-full flex items-center justify-center border border-green-300">
               <div className="text-white text-xs">☪</div>
             </div>
             <span className="text-white font-semibold text-lg">𝘼𝙡 𝙅𝙖‘𝙛𝙖𝙧𝙞𝙮𝙮𝙖</span>
           </div>
-          <p className="text-gray-300 italic">“May Allah have mercy on the one who revives our affair.” — Imām Ja‘far al‑Ṣādiq (a)</p>
+          <p className="text-gray-300 italic">
+            “May Allah have mercy on the one who revives our affair.” — Imām Ja‘far al-Ṣādiq (a)
+          </p>
           <div className="flex justify-center gap-6 mt-4">
-            <Button variant="ghost" size="sm" className="text-purple-300 hover:text-white">Discord</Button>
-            <Button variant="ghost" size="sm" className="text-purple-300 hover:text-white">TikTok</Button>
-            <Button variant="ghost" size="sm" className="text-purple-300 hover:text-white">Instagram</Button>
+            <Button variant="ghost" size="sm" className="text-green-300 hover:text-white">
+              Discord
+            </Button>
+            <Button variant="ghost" size="sm" className="text-green-300 hover:text-white">
+              TikTok
+            </Button>
+            <Button variant="ghost" size="sm" className="text-green-300 hover:text-white">
+              Instagram
+            </Button>
           </div>
         </div>
       </div>
@@ -392,7 +419,7 @@ export default function BooksPage() {
           bookTitle={selectedBook.title}
           pdfUrl={selectedBook.pdfUrl}
           isOpen={isPDFViewerOpen}
-          onClose={closePDFViewer}
+          onClose={() => setIsPDFViewerOpen(false)}
           bookId={selectedBook.id.toString()}
         />
       )}

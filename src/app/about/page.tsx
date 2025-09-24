@@ -30,7 +30,7 @@ const communityStats = [
 // Belief sections
 const beliefSections = [
   {
-    title: "Love of the Ahl al‑Bayt",
+    title: "Love of the Ahl al-Bayt",
     description:
       "Rooted in devotion to the Prophet ﷺ and his purified Household, we learn, discuss, and serve with adab. Our space centers the ethics, teachings, and legacy of the Twelve Imams (a).",
     icon: "❤️"
@@ -38,7 +38,7 @@ const beliefSections = [
   {
     title: "Ja‘farī Scholarship",
     description:
-      "From ‘aqīdah (tawḥīd, ‘adl, nubuwwa, imāmah, ma‘ād) to uṣūl al‑fiqh and ḥadīth, we explore the living tradition of ijtihād and marja‘iyyah through evidence‑based study and respectful dialogue.",
+      "From ‘aqīdah (tawḥīd, ‘adl, nubuwwa, imāmah, ma‘ād) to uṣūl al-fiqh and ḥadīth, we explore the living tradition of ijtihād and marja‘iyyah through evidence-based study and respectful dialogue.",
     icon: "🧭"
   },
   {
@@ -52,11 +52,11 @@ const beliefSections = [
 // StatCard component
 function StatCard({ stat }: { stat: typeof communityStats[0] }) {
   return (
-    <Card className="bg-purple-900/30 border-purple-600/30 backdrop-blur-sm text-center">
+    <Card className="bg-primary/30 border-primary/30 backdrop-blur-sm text-center">
       <CardContent className="p-6">
         <div className="text-3xl mb-2">{stat.icon}</div>
         <div className="text-3xl font-bold text-white mb-2">{stat.number}</div>
-        <div className="text-purple-200 text-sm">{stat.label}</div>
+        <div className="text-green-200 text-sm">{stat.label}</div>
       </CardContent>
     </Card>
   );
@@ -65,7 +65,7 @@ function StatCard({ stat }: { stat: typeof communityStats[0] }) {
 // BeliefCard component
 function BeliefCard({ belief }: { belief: typeof beliefSections[0] }) {
   return (
-    <Card className="bg-purple-900/30 border-purple-600/30 backdrop-blur-sm hover:bg-purple-900/40 transition-all duration-300">
+    <Card className="bg-primary/20 border-primary/30 backdrop-blur-sm hover:bg-primary/30 transition-all duration-300">
       <CardContent className="p-8">
         <div className="text-4xl mb-4 text-center">{belief.icon}</div>
         <h3 className="text-xl font-semibold text-white mb-4 text-center">{belief.title}</h3>
@@ -77,17 +77,17 @@ function BeliefCard({ belief }: { belief: typeof beliefSections[0] }) {
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-950 via-indigo-950 to-blue-950">
+    <div className="min-h-screen bg-gradient-to-br from-green-950 via-emerald-900 to-black">
       <div className="container mx-auto px-6 py-8">
         {/* Hero Section */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            About <span className="bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">Us</span>
+            About <span className="bg-gradient-to-r from-green-300 to-red-400 bg-clip-text text-transparent">Us</span>
           </h1>
 
           <div className="max-w-4xl mx-auto text-left mt-12">
             <h2 className="text-3xl font-bold text-white mb-6">
-              Where the ‘Ilm of the Ahl al‑Bayt (a) is Illuminated
+              Where the ‘Ilm of the Ahl al-Bayt (a) is Illuminated
             </h2>
 
             <div className="space-y-6 text-gray-300 leading-relaxed">
@@ -115,7 +115,7 @@ export default function AboutPage() {
               </p>
 
               <p>
-                Join us as we nurture love for the Ahl al‑Bayt (a), strengthen community, and strive for knowledge that
+                Join us as we nurture love for the Ahl al-Bayt (a), strengthen community, and strive for knowledge that
                 refines the soul and serves society.
               </p>
             </div>
@@ -164,18 +164,18 @@ export default function AboutPage() {
 
         {/* Call to Action */}
         <div className="text-center mb-16">
-          <Card className="bg-purple-900/30 border-purple-600/30 backdrop-blur-sm">
+          <Card className="bg-primary/20 border-primary/30 backdrop-blur-sm">
             <CardContent className="p-12">
               <h2 className="text-3xl font-bold text-white mb-6">Ready to Join Our Server</h2>
               <p className="text-gray-300 text-lg mb-8 max-w-3xl mx-auto leading-relaxed">
                 Your next spark of understanding and your next meaningful connection are one step away. At Al Ja‘fariyya,
-                we learn together—reviving knowledge, refining character, and honoring the legacy of the Ahl al‑Bayt (a).
+                we learn together—reviving knowledge, refining character, and honoring the legacy of the Ahl al-Bayt (a).
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3">
+                <Button size="lg" className="bg-accent hover:bg-accent/80 text-white px-8 py-3">
                   👥 Join Our Community
                 </Button>
-                <Button size="lg" variant="outline" className="border-purple-400 text-purple-300 hover:bg-purple-500/20 px-8 py-3">
+                <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/20 px-8 py-3">
                   📚 Explore Our Library
                 </Button>
               </div>
@@ -184,24 +184,24 @@ export default function AboutPage() {
         </div>
 
         {/* Footer */}
-        <div className="text-center pt-8 border-t border-purple-600/30">
+        <div className="text-center pt-8 border-t border-primary/30">
           <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center border border-purple-300">
+            <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-red-500 rounded-full flex items-center justify-center border border-green-300">
               <div className="text-white text-xs">☪</div>
             </div>
             <span className="text-white font-semibold text-lg">𝘼𝙡 𝙅𝙖‘𝙛𝙖𝙧𝙞𝙮𝙮𝙖</span>
           </div>
           <p className="text-gray-300 italic">
-            “May Allah have mercy on the one who revives our affair.” — Imām Ja‘far al‑Ṣādiq (a)
+            “May Allah have mercy on the one who revives our affair.” — Imām Ja‘far al-Ṣādiq (a)
           </p>
           <div className="flex justify-center gap-6 mt-4">
-            <Button variant="ghost" size="sm" className="text-purple-300 hover:text-white">
+            <Button variant="ghost" size="sm" className="text-primary hover:text-white">
               Discord
             </Button>
-            <Button variant="ghost" size="sm" className="text-purple-300 hover:text-white">
+            <Button variant="ghost" size="sm" className="text-primary hover:text-white">
               TikTok
             </Button>
-            <Button variant="ghost" size="sm" className="text-purple-300 hover:text-white">
+            <Button variant="ghost" size="sm" className="text-primary hover:text-white">
               Instagram
             </Button>
           </div>
