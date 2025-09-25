@@ -9,54 +9,36 @@ import { motion, AnimatePresence } from "framer-motion";
 const samplePlaylists = [
   {
     id: 1,
-    title: "Nahj al-Balāgha: Imam ‘Alī (a) in the 21st Century",
-    teacher: "Dr. Sayed Ammar Nakshawani",
+    title: "Adalat al-Sahaba in the Quran",
+    teacher: "Sayyid Ali Abu al-Hasan",
     description:
-      "Walkthrough of Nahj al-Balāgha’s key sermons and letters, exploring ethics, leadership, and spirituality.",
+      "The Uprightness of the Companions in the Qurʾān...",
     category: "Aqidah / Ethics",
-    episodes: 20,
+    episodes: 8,
     videoUrls: {
-      EN: "https://www.youtube.com/embed/videoseries?list=PLgz_bSlK7VLwHQ2qSK1kkUpCEKCzszZbL",
-      AR: "https://www.youtube.com/embed/videoseries?list=PLgz_bSlK7VLwHQ2qSK1kkUpCEKCzszZbL",
-      UR: "https://www.youtube.com/embed/videoseries?list=PLgz_bSlK7VLwHQ2qSK1kkUpCEKCzszZbL",
+      EN: "https://www.youtube.com/watch?v=MMmhOdEYYek&list=PLuQ8WZvjfbBzlwih81Ugdr-YDmCh7Jtof",
     },
   },
   {
     id: 2,
-    title: "Tafsīr al-Mīzān – Semester One",
-    teacher: "Shaykh Dr. Mohammed Ali Shomali",
+    title: "طريق معرفة الحق بين المذاهب الإسلامية",
+    teacher: "السيد علي أبو الحسن",
     description:
-      "Intro to ‘Allāma Ṭabāṭabā’ī’s tafsīr method, with applied readings and thematic discussions.",
-    category: "Tafsir",
-    episodes: 10,
+      "كيفية معرفة الحق بين المذاهب الإسلامية",
+    category: "Aqeedah",
+    episodes: 37,
     videoUrls: {
-      EN: "https://www.youtube.com/embed/videoseries?list=PLGpGEfBFqEitIjOzIWwciuTpPc2jGRjqT",
-      AR: "https://www.youtube.com/embed/videoseries?list=PLGpGEfBFqEitIjOzIWwciuTpPc2jGRjqT",
-      UR: "https://www.youtube.com/embed/videoseries?list=PLGpGEfBFqEitIjOzIWwciuTpPc2jGRjqT",
-    },
-  },
-  {
-    id: 3,
-    title: "Islamic Belief System (Aqāʾid)",
-    teacher: "Shaykh Dr. Mohammed Ali Shomali",
-    description:
-      "Systematic uṣūl al-dīn series (Knowing God, Prophethood, Imamate, Resurrection).",
-    category: "Aqidah",
-    episodes: 16,
-    videoUrls: {
-      EN: "https://www.youtube.com/embed/videoseries?list=PLD91w_p7jCJ4A75LfYCaZkx4jlBJ7TDsA",
-      AR: "https://www.youtube.com/embed/videoseries?list=PLD91w_p7jCJ4A75LfYCaZkx4jlBJ7TDsA",
-      UR: "https://www.youtube.com/embed/videoseries?list=PLD91w_p7jCJ4A75LfYCaZkx4jlBJ7TDsA",
+      AR: "https://www.youtube.com/watch?v=I1HkRvIVZ1Y&list=PLvlHnPlDJB2XIC8hKuNbA747ZKS-NxVof",
     },
   },
 ];
 
 // 🔹 Extract YouTube thumbnail
 function getYoutubeThumbnail(url: string) {
-  const match = url.match(/list=([a-zA-Z0-9_-]+)/);
-  const id = match ? match[1] : null;
-  return id
-    ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg`
+  const match = url.match(/v=([a-zA-Z0-9_-]{11})/); // extract first video id
+  const videoId = match ? match[1] : null;
+  return videoId
+    ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
     : "https://via.placeholder.com/480x360?text=Video";
 }
 
@@ -189,23 +171,24 @@ function PlaylistCard({ playlist }: { playlist: typeof samplePlaylists[0] }) {
 
                 {/* Episodes Pills */}
                 <div className="mb-3">
-                  <p className="text-sm text-gray-400 mb-2">Episodes:</p>
-                  <div className="flex flex-wrap gap-2 max-h-24 overflow-y-auto">
-                    {Array.from({ length: playlist.episodes }, (_, i) => (
-                      <Button
-                        key={i + 1}
-                        size="sm"
-                        variant={
-                          selectedEpisode === i + 1 ? "default" : "outline"
-                        }
-                        onClick={() => setSelectedEpisode(i + 1)}
-                        className="text-xs px-3 py-1 rounded-full"
-                      >
-                        {i + 1}
-                      </Button>
-                    ))}
-                  </div>
+                <p className="text-sm text-gray-400 mb-2">Episodes:</p>
+                <div className="flex flex-wrap gap-2">
+                  {Array.from({ length: playlist.episodes }, (_, i) => (
+                    <button
+                      key={i + 1}
+                      onClick={() => setSelectedEpisode(i + 1)}
+                      className={`px-3 py-1 rounded-full text-xs font-medium transition 
+                        ${
+                          selectedEpisode === i + 1
+                            ? "bg-green-600 text-white shadow-lg"
+                            : "bg-green-800/30 text-gray-300 hover:bg-green-700/50"
+                        }`}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
                 </div>
+              </div>
 
                 <Button
                   size="sm"
