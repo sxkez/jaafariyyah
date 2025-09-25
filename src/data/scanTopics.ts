@@ -63,7 +63,7 @@ export const scanTopics: ScanTopic[] = [
           "Majma’ Al-Fatawa Vol. 12, Pg 492 by Ibn Taymiyyah, The Salaf made lots of mistakes in lots of issues, and it is agreed that this does not make them disbelievers. For instance, some of the companions denied that the dead can hear the call of the living; some of them denied that the Mi’raaj occurred in a state of wakefulness; some of them denied that Muhammad (sawa) saw his Lord; the opinions of some of them on Khilafah and Tafdheel are well known, as well as the fighting of some by others and the cursing of some by others and the declaring of some by others as Kuffar! These are well known statements.",
       },
       {
-        img: "https://i.imgur.com/d3LVAOk.jpg",
+        img: "https://imgur.com/U0FPWRb",
         caption: "Ibn Taymiyyah: The Dead Recognize Visitors and Respond",
         context: `
         Majma’ Al-Fatawa Vol. 24, Pg 185 by Ibn Taymiyyah:
