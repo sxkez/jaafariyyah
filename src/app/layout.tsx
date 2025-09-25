@@ -16,12 +16,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "𝘼𝙡 𝙅𝙖‘𝙛𝙖𝙧𝙞𝙮𝙮𝙖 (الجعفرية)",
-  description:
-    "Ja‘farī (Twelver Shi‘i) scholarship that meets the inquisitive heart.",
+  description: "Ja‘farī (Twelver Shi‘i) scholarship that meets the inquisitive heart.",
   openGraph: {
     title: "Al Ja‘fariyya – Twelver Shi‘i Community",
     description:
-      "Learn, share, and connect around the teachings of the Ahl al‑Bayt (a). A hub for students and seekers of Shi‘i knowledge.",
+      "Learn, share, and connect around the teachings of the Ahl al-Bayt (a). A hub for students and seekers of Shi‘i knowledge.",
     url: "https://your-domain.com",
     siteName: "Al Ja‘fariyya",
     images: [
@@ -46,15 +45,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en" dir="ltr" className="dark">
       <body className={`${geist.variable} ${geistMono.variable} antialiased`}>
         <AuthProvider>
           <div className="flex min-h-screen">
+            {/* Sidebar stays consistent */}
             <Sidebar />
+            
+            {/* Dynamic page content */}
             <main className="flex-1">{children}</main>
           </div>
         </AuthProvider>
