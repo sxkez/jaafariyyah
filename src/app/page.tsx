@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
-import { DiscordWidget } from "@/components/DiscordWidget";
 import { PrayerTimesWidget } from "@/components/PrayerTimesWidget";
 
 // Replace with your real Discord invite
@@ -215,11 +214,15 @@ export default function Home() {
                 Join our vibrant community and stay updated with prayer times
               </p>
             </div>
-            <div className="grid md:grid-cols-2 gap-8">
-              <DiscordWidget showActivity={true} />
+            <div className="flex flex-col items-center space-y-6">
+            <h2 className="text-2xl font-bold text-white">
+              🕌 Prayer Times
+            </h2>
+            <div className="w-full max-w-lg rounded-2xl border border-green-500/50 shadow-[0_0_20px_rgba(34,197,94,0.3)] hover:shadow-[0_0_35px_rgba(34,197,94,0.6)] transition-all duration-500">
               <PrayerTimesWidget />
             </div>
-          </div>
+            </div>
+           </div>
         </section>
 
         <Footer />
