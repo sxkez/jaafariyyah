@@ -3,65 +3,62 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { motion, AnimatePresence } from "framer-motion";
 
-// Twelver Shi'i sample playlist data
+// 🔹 Sample Playlists (move this to /data/playlists.ts later)
 const samplePlaylists = [
   {
     id: 1,
     title: "Nahj al-Balāgha: Imam ‘Alī (a) in the 21st Century",
-    titleEnglish: "Nahj al-Balāgha Series",
     teacher: "Dr. Sayed Ammar Nakshawani",
     description:
-      "An accessible, modern walk-through of key sermons and letters from Nahj al-Balāgha, exploring ethics, leadership, and spirituality.",
-    thumbnail: "https://ext.same-assets.com/4138622892/2476500941.png",
-    language: "EN",
+      "Walkthrough of Nahj al-Balāgha’s key sermons and letters, exploring ethics, leadership, and spirituality.",
     category: "Aqidah / Ethics",
-    duration: "~60:00",
     episodes: 20,
     videoUrls: {
-      AR: "https://www.youtube.com/embed/videoseries?list=PLgz_bSlK7VLwHQ2qSK1kkUpCEKCzszZbL",
       EN: "https://www.youtube.com/embed/videoseries?list=PLgz_bSlK7VLwHQ2qSK1kkUpCEKCzszZbL",
-      UR: "https://www.youtube.com/embed/videoseries?list=PLgz_bSlK7VLwHQ2qSK1kkUpCEKCzszZbL"
-    }
+      AR: "https://www.youtube.com/embed/videoseries?list=PLgz_bSlK7VLwHQ2qSK1kkUpCEKCzszZbL",
+      UR: "https://www.youtube.com/embed/videoseries?list=PLgz_bSlK7VLwHQ2qSK1kkUpCEKCzszZbL",
+    },
   },
   {
     id: 2,
     title: "Tafsīr al-Mīzān – Semester One",
-    titleEnglish: "Tafsīr al-Mīzān – Method & Selections",
     teacher: "Shaykh Dr. Mohammed Ali Shomali",
     description:
-      "Intro to ‘Allāma Ṭabāṭabā’ī’s exegetical method, with applied readings and thematic discussions.",
-    thumbnail: "https://ext.same-assets.com/4138622892/645406049.png",
-    language: "EN",
+      "Intro to ‘Allāma Ṭabāṭabā’ī’s tafsīr method, with applied readings and thematic discussions.",
     category: "Tafsir",
-    duration: "~50:00",
     episodes: 10,
     videoUrls: {
-      AR: "https://www.youtube.com/embed/videoseries?list=PLGpGEfBFqEitIjOzIWwciuTpPc2jGRjqT",
       EN: "https://www.youtube.com/embed/videoseries?list=PLGpGEfBFqEitIjOzIWwciuTpPc2jGRjqT",
-      UR: "https://www.youtube.com/embed/videoseries?list=PLGpGEfBFqEitIjOzIWwciuTpPc2jGRjqT"
-    }
+      AR: "https://www.youtube.com/embed/videoseries?list=PLGpGEfBFqEitIjOzIWwciuTpPc2jGRjqT",
+      UR: "https://www.youtube.com/embed/videoseries?list=PLGpGEfBFqEitIjOzIWwciuTpPc2jGRjqT",
+    },
   },
   {
     id: 3,
     title: "Islamic Belief System (Aqāʾid)",
-    titleArabic: "النظام الاعتقادي",
-    titleEnglish: "Islamic Belief System Course",
     teacher: "Shaykh Dr. Mohammed Ali Shomali",
     description:
-      "Systematic uṣūl al-dīn series (Knowing God, Prophethood, Imamate, Resurrection) delivered at the Hawza of England/ICEL.",
-    thumbnail: "https://ext.same-assets.com/4138622892/2893945201.png",
-    language: "EN",
+      "Systematic uṣūl al-dīn series (Knowing God, Prophethood, Imamate, Resurrection).",
     category: "Aqidah",
-    duration: "~45:00",
     episodes: 16,
     videoUrls: {
-      AR: "https://www.youtube.com/embed/videoseries?list=PLD91w_p7jCJ4A75LfYCaZkx4jlBJ7TDsA",
       EN: "https://www.youtube.com/embed/videoseries?list=PLD91w_p7jCJ4A75LfYCaZkx4jlBJ7TDsA",
-      UR: "https://www.youtube.com/embed/videoseries?list=PLD91w_p7jCJ4A75LfYCaZkx4jlBJ7TDsA"
-    }
-  }
+      AR: "https://www.youtube.com/embed/videoseries?list=PLD91w_p7jCJ4A75LfYCaZkx4jlBJ7TDsA",
+      UR: "https://www.youtube.com/embed/videoseries?list=PLD91w_p7jCJ4A75LfYCaZkx4jlBJ7TDsA",
+    },
+  },
 ];
+
+// 🔹 Extract YouTube thumbnail
+function getYoutubeThumbnail(url: string) {
+  const match = url.match(/list=([a-zA-Z0-9_-]+)/);
+  const id = match ? match[1] : null;
+  return id
+    ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg`
+    : "https://via.placeholder.com/480x360?text=Video";
+}
 
 // 🎥 Video Player Modal
 function VideoPlayerModal({
@@ -80,162 +77,150 @@ function VideoPlayerModal({
   if (!isOpen || !playlist) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-      <div className="bg-green-900/90 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-auto">
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold text-white">
-              {playlist.title} — Episode {selectedEpisode}
-            </h2>
-            <Button
-              onClick={onClose}
-              variant="ghost"
-              size="sm"
-              className="text-white hover:bg-green-800"
-            >
-              ✕
-            </Button>
-          </div>
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            className="bg-green-950/90 border border-green-700 rounded-xl w-full max-w-4xl max-h-[90vh] overflow-auto shadow-xl"
+          >
+            <div className="p-6">
+              {/* Header */}
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold text-white">
+                  {playlist.title} — Ep {selectedEpisode}
+                </h2>
+                <Button
+                  onClick={onClose}
+                  variant="ghost"
+                  size="sm"
+                  className="text-white hover:bg-green-800"
+                >
+                  ✕
+                </Button>
+              </div>
 
-          <div className="aspect-video bg-black rounded-lg mb-4 overflow-hidden">
-            <iframe
-              src={playlist.videoUrls[selectedLanguage as keyof typeof playlist.videoUrls]}
-              title={`${playlist.title} - Episode ${selectedEpisode}`}
-              className="w-full h-full"
-              allowFullScreen
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            />
-          </div>
+              {/* Video */}
+              <div className="aspect-video bg-black rounded-lg mb-4 overflow-hidden">
+                <iframe
+                  src={
+                    playlist.videoUrls[
+                      selectedLanguage as keyof typeof playlist.videoUrls
+                    ]
+                  }
+                  title={`${playlist.title} - Episode ${selectedEpisode}`}
+                  className="w-full h-full"
+                  allowFullScreen
+                />
+              </div>
 
-          <div className="text-center">
-            <h3 className="text-lg font-semibold text-white mb-2">
-              {playlist.titleEnglish || playlist.title}
-            </h3>
-            <p className="text-green-200 text-sm mb-2">
-              Teacher: {playlist.teacher}
-            </p>
-            <p className="text-gray-300 text-sm">{playlist.description}</p>
-          </div>
-        </div>
-      </div>
-    </div>
+              {/* Description */}
+              <p className="text-gray-300 text-sm">{playlist.description}</p>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
 // 📺 Playlist Card
 function PlaylistCard({ playlist }: { playlist: typeof samplePlaylists[0] }) {
-  const [selectedLanguage, setSelectedLanguage] = useState(playlist.language);
+  const [selectedLanguage, setSelectedLanguage] = useState("EN");
   const [selectedEpisode, setSelectedEpisode] = useState(1);
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
 
-  const handleWatch = () => setIsPlayerOpen(true);
-
   return (
     <>
-      <Card className="bg-green-900/30 border-green-600/30 backdrop-blur-sm hover:bg-green-900/40 transition-all duration-300 overflow-hidden">
-        <CardContent className="p-0">
-          <div className="grid md:grid-cols-2 gap-0">
-            {/* Thumbnail */}
-            <div
-              className="aspect-video relative overflow-hidden cursor-pointer"
-              onClick={handleWatch}
-            >
-              <img
-                src={playlist.thumbnail}
-                alt={playlist.title}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-black/30 flex items-center justify-center hover:bg-black/40 transition-colors">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm hover:bg-white/30 transition-colors">
-                  <div className="w-0 h-0 border-l-[15px] border-l-white border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent ml-1"></div>
+      <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
+        <Card className="bg-green-900/30 border-green-700/40 hover:bg-green-900/50 transition-all duration-300 overflow-hidden">
+          <CardContent className="p-0">
+            <div className="flex flex-col">
+              {/* Thumbnail */}
+              <div
+                className="aspect-video relative cursor-pointer"
+                onClick={() => setIsPlayerOpen(true)}
+              >
+                <img
+                  src={getYoutubeThumbnail(playlist.videoUrls.EN)}
+                  alt={playlist.title}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black/30 flex items-center justify-center hover:bg-black/40 transition">
+                  <span className="text-white text-3xl">▶</span>
                 </div>
               </div>
-              <div className="absolute top-2 left-2">
-                <span className="bg-green-600 text-white text-xs px-2 py-1 rounded">
-                  {selectedLanguage}
-                </span>
-              </div>
-              <div className="absolute bottom-2 right-2">
-                <span className="bg-black/70 text-white text-xs px-2 py-1 rounded">
-                  {playlist.duration}
-                </span>
-              </div>
-            </div>
 
-            {/* Info */}
-            <div className="p-6">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="bg-green-600/40 text-green-200 text-xs px-2 py-1 rounded">
-                  {playlist.category}
-                </span>
-                <span className="text-gray-400 text-xs">
-                  {playlist.episodes} episodes
-                </span>
-              </div>
+              {/* Info */}
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-white mb-1">
+                  {playlist.title}
+                </h3>
+                <p className="text-sm text-green-300 mb-2">
+                  {playlist.teacher}
+                </p>
+                <p className="text-sm text-gray-300 mb-3 line-clamp-3">
+                  {playlist.description}
+                </p>
 
-              <h3 className="text-white font-semibold text-lg mb-2 line-clamp-2">
-                {playlist.title}
-              </h3>
-              {(playlist.titleEnglish || playlist.titleArabic) && (
-                <h4 className="text-green-300 text-sm mb-3">
-                  {playlist.titleEnglish || playlist.titleArabic}
-                </h4>
-              )}
-              <p className="text-green-200 text-sm mb-3">
-                {playlist.teacher}
-              </p>
-              <p className="text-gray-300 text-sm mb-4 line-clamp-3">
-                {playlist.description}
-              </p>
-
-              {/* Language */}
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-sm text-gray-400">Choose language:</span>
-                <div className="flex gap-1">
+                {/* Language Toggle */}
+                <div className="flex gap-2 mb-3">
                   {["AR", "UR", "EN"].map((lang) => (
                     <Button
                       key={lang}
                       size="sm"
-                      variant={selectedLanguage === lang ? "default" : "outline"}
+                      variant={
+                        selectedLanguage === lang ? "default" : "outline"
+                      }
                       onClick={() => setSelectedLanguage(lang)}
-                      className="text-xs px-2 py-1 h-6"
+                      className="text-xs"
                     >
                       {lang}
                     </Button>
                   ))}
                 </div>
-              </div>
 
-              {/* Episodes */}
-              <div className="mb-4">
-                <label className="text-sm text-gray-400 block mb-2">
-                  Choose episode:
-                </label>
-                <select
-                  value={selectedEpisode}
-                  onChange={(e) => setSelectedEpisode(Number(e.target.value))}
-                  className="w-full bg-green-900/30 border border-green-600/30 rounded text-white text-sm py-2 px-3 focus:outline-none focus:border-green-400"
+                {/* Episodes Pills */}
+                <div className="mb-3">
+                  <p className="text-sm text-gray-400 mb-2">Episodes:</p>
+                  <div className="flex flex-wrap gap-2 max-h-24 overflow-y-auto">
+                    {Array.from({ length: playlist.episodes }, (_, i) => (
+                      <Button
+                        key={i + 1}
+                        size="sm"
+                        variant={
+                          selectedEpisode === i + 1 ? "default" : "outline"
+                        }
+                        onClick={() => setSelectedEpisode(i + 1)}
+                        className="text-xs px-3 py-1 rounded-full"
+                      >
+                        {i + 1}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                <Button
+                  size="sm"
+                  onClick={() => setIsPlayerOpen(true)}
+                  className="w-full bg-green-600 hover:bg-green-700 text-white"
                 >
-                  {Array.from({ length: playlist.episodes }, (_, i) => (
-                    <option key={i + 1} value={i + 1}>
-                      Episode {i + 1}
-                    </option>
-                  ))}
-                </select>
+                  ▶ Watch Now
+                </Button>
               </div>
-
-              <Button
-                size="sm"
-                onClick={handleWatch}
-                className="bg-green-600 hover:bg-green-700 text-white w-full"
-              >
-                ▶ Watch Now
-              </Button>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </motion.div>
 
+      {/* Modal */}
       <VideoPlayerModal
         playlist={playlist}
         isOpen={isPlayerOpen}
@@ -247,65 +232,26 @@ function PlaylistCard({ playlist }: { playlist: typeof samplePlaylists[0] }) {
   );
 }
 
-// 📚 Main Videos Page
-export default function VideosPage() {
+// 📚 Main Page
+export default function LessonsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-950 via-emerald-950 to-teal-950">
-      <div className="container mx-auto px-6 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-green-950 via-emerald-950 to-black">
+      <div className="container mx-auto px-6 py-12">
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Lessons
           </h1>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Watch featured Shi‘i lectures and series from trusted teachers.
+            Explore Shi‘i lectures and courses from trusted teachers.
           </p>
         </div>
 
-        {/* Playlists */}
-        <div className="space-y-6">
+        {/* Playlists Grid */}
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {samplePlaylists.map((playlist) => (
             <PlaylistCard key={playlist.id} playlist={playlist} />
           ))}
-        </div>
-
-        {/* Footer */}
-        <div className="text-center mt-16 pt-8 border-t border-green-600/30">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center border border-green-300">
-              <div className="text-white text-xs">☪</div>
-            </div>
-            <span className="text-white font-semibold text-lg">
-              𝘼𝙡 𝙅𝙖‘𝙛𝙖𝙧𝙞𝙮𝙮𝙖
-            </span>
-          </div>
-          <p className="text-gray-300 italic">
-            “May Allah have mercy on the one who revives our affair.” — Imām
-            Ja‘far al-Ṣādiq (a)
-          </p>
-          <div className="flex justify-center gap-6 mt-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-green-300 hover:text-white"
-            >
-              Discord
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-green-300 hover:text-white"
-            >
-              TikTok
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-green-300 hover:text-white"
-            >
-              Instagram
-            </Button>
-          </div>
         </div>
       </div>
     </div>
