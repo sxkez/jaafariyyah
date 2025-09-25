@@ -359,7 +359,10 @@ export default function BooksPage() {
             currentCategory={activeFilter === "all" ? undefined : activeFilter}
             onBookSelect={(bookId) => {
               const book = sampleBooks.find((b) => b.id.toString() === bookId);
-              if (book) setSelectedBook(book), setIsPDFViewerOpen(true);
+              if (book) {
+                setSelectedBook(book);
+                setIsPDFViewerOpen(true);
+              }
             }}
           />
         </div>

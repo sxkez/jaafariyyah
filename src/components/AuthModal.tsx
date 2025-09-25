@@ -74,8 +74,9 @@ export function AuthModal({ isOpen, onClose, onAuth }: AuthModalProps) {
 
       setFormData({ name: "", email: "", password: "", confirmPassword: "" });
       onClose();
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      alert(message);
     } finally {
       setLoading(false);
     }
@@ -94,8 +95,9 @@ export function AuthModal({ isOpen, onClose, onAuth }: AuthModalProps) {
       });
 
       onClose();
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      alert(message);
     } finally {
       setLoading(false);
     }
