@@ -62,10 +62,10 @@ function toEmbedUrl(url: string, episode: number = 1) {
   const playlistId = listMatch ? listMatch[1] : null;
 
   if (videoId && playlistId) {
-    return `https://www.youtube.com/embed/${videoId}?list=${playlistId}&index=${episode}`;
+    return `https://www.youtube.com/embed/${videoId}?list=${playlistId}&index=${episode}&start_radio=1`;
   }
   if (playlistId) {
-    return `https://www.youtube.com/embed/videoseries?list=${playlistId}&index=${episode}`;
+    return `https://www.youtube.com/embed/videoseries?list=${playlistId}&index=${episode}&start_radio=1&listType=playlist`;
   }
   if (videoId) {
     return `https://www.youtube.com/embed/${videoId}`;
@@ -81,18 +81,20 @@ function VideoPlayerModal({
   onClose,
   selectedLanguage,
   selectedEpisode,
+  setSelectedEpisode,
 }: {
   playlist: typeof samplePlaylists[0] | null;
   isOpen: boolean;
   onClose: () => void;
   selectedLanguage: string;
   selectedEpisode: number;
+  setSelectedEpisode: (ep: number) => void;
 }) {
   if (!isOpen || !playlist) return null;
 
   const videoUrl =
     playlist.videoUrls[selectedLanguage as keyof typeof playlist.videoUrls] ||
-    Object.values(playlist.videoUrls)[0]; // fallback
+    Object.values(playlist.videoUrls)[0];
 
   return (
     <AnimatePresence>
@@ -107,7 +109,7 @@ function VideoPlayerModal({
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-green-950/90 border border-green-700 rounded-xl w-full max-w-4xl max-h-[90vh] overflow-auto shadow-xl"
+            className="bg-green-950/90 border border-green-700 rounded-xl w-full max-w-5xl max-h-[90vh] overflow-auto shadow-xl"
           >
             <div className="p-6">
               {/* Header */}
@@ -128,12 +130,34 @@ function VideoPlayerModal({
               {/* Video */}
               <div className="aspect-video bg-black rounded-lg mb-4 overflow-hidden">
                 <iframe
+                  key={`${playlist.id}-${selectedEpisode}-${selectedLanguage}`}
                   src={toEmbedUrl(videoUrl, selectedEpisode)}
                   title={`${playlist.title} - Episode ${selectedEpisode}`}
                   className="w-full h-full"
                   allowFullScreen
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 />
+              </div>
+
+              {/* Episodes in modal */}
+              <div className="mb-4">
+                <p className="text-sm text-gray-400 mb-2">Episodes:</p>
+                <div className="flex flex-wrap gap-2">
+                  {Array.from({ length: playlist.episodes }, (_, i) => (
+                    <button
+                      key={i + 1}
+                      onClick={() => setSelectedEpisode(i + 1)}
+                      className={`px-3 py-1 rounded-full text-xs font-medium transition 
+                        ${
+                          selectedEpisode === i + 1
+                            ? "bg-green-600 text-white shadow-lg"
+                            : "bg-green-800/30 text-gray-300 hover:bg-green-700/50"
+                        }`}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Description */}
@@ -250,6 +274,7 @@ function PlaylistCard({ playlist }: { playlist: typeof samplePlaylists[0] }) {
         onClose={() => setIsPlayerOpen(false)}
         selectedLanguage={selectedLanguage}
         selectedEpisode={selectedEpisode}
+        setSelectedEpisode={setSelectedEpisode}
       />
     </>
   );
