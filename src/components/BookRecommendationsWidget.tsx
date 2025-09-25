@@ -5,11 +5,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import {
-  AIRecommendationEngine,
-  getUserPreferences,
-  trackUserInteraction,
+  getAIRecommendations,
   type BookRecommendation,
-} from "@/services/aiRecommendationService";
+} from "@/services/recommendationService"; // new service
 
 interface BookRecommendationsWidgetProps {
   currentCategory?: string;
@@ -20,15 +18,14 @@ export function BookRecommendationsWidget({
   currentCategory,
   onBookSelect,
 }: BookRecommendationsWidgetProps) {
-  const [recommendations, setRecommendations] = useState<BookRecommendation[]>(
-    []
-  );
+  const [recommendations, setRecommendations] = useState<BookRecommendation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user, isAuthenticated } = useAuth();
 
   useEffect(() => {
     loadRecommendations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, currentCategory]);
 
   const loadRecommendations = async () => {
@@ -36,37 +33,17 @@ export function BookRecommendationsWidget({
       setLoading(true);
       setError(null);
 
-      const engine = AIRecommendationEngine.getInstance();
-      const preferences = user
-        ? await getUserPreferences(user.email)
-        : {
-            categories: currentCategory ? [currentCategory] : [],
-            languages: ["EN"],
-            difficultyLevel: "mixed" as const,
-            readingHistory: [],
-            bookmarks: [],
-            searchHistory: [],
-            timeSpent: {},
-          };
-
-      const context = {
-        currentCategory,
-        timeOfDay: getTimeOfDay(),
-        sessionType: "casual_browse" as const,
-      };
-
-      const recs = await engine.getRecommendations(preferences, context, 4);
-      setRecommendations(recs);
-
-      if (user && currentCategory) {
-        trackUserInteraction(user.email, {
-          type: "category_browse",
+      const recs = await getAIRecommendations(
+        {
+          user,
           category: currentCategory,
-          duration: 30,
-        }).catch(console.error);
-      }
+        },
+        4
+      );
+
+      setRecommendations(recs);
     } catch (err) {
-      console.error("Failed to load recommendations:", err);
+      console.error("Recommendation error:", err);
       setError("Unable to load recommendations");
     } finally {
       setLoading(false);
@@ -74,21 +51,7 @@ export function BookRecommendationsWidget({
   };
 
   const handleBookClick = (bookId: string) => {
-    if (user) {
-      trackUserInteraction(user.email, {
-        type: "book_view",
-        bookId,
-      }).catch(console.error);
-    }
     if (onBookSelect) onBookSelect(bookId);
-  };
-
-  const getTimeOfDay = (): "morning" | "afternoon" | "evening" | "night" => {
-    const hour = new Date().getHours();
-    if (hour < 12) return "morning";
-    if (hour < 17) return "afternoon";
-    if (hour < 21) return "evening";
-    return "night";
   };
 
   const getDifficultyColor = (difficulty: string) => {
@@ -107,11 +70,9 @@ export function BookRecommendationsWidget({
   if (loading) {
     return (
       <Card className="bg-green-950/30 border-green-700/40 backdrop-blur-sm">
-        <CardContent className="p-6">
-          <div className="flex items-center justify-center">
-            <div className="animate-spin w-6 h-6 border-2 border-green-600 border-t-transparent rounded-full"></div>
-            <span className="ml-3 text-gray-300">Getting recommendations...</span>
-          </div>
+        <CardContent className="p-6 flex items-center justify-center gap-3">
+          <div className="animate-spin w-6 h-6 border-2 border-green-600 border-t-transparent rounded-full"></div>
+          <span className="text-gray-300">Fetching recommendations...</span>
         </CardContent>
       </Card>
     );
@@ -120,24 +81,22 @@ export function BookRecommendationsWidget({
   if (error || recommendations.length === 0) {
     return (
       <Card className="bg-green-950/30 border-green-700/40 backdrop-blur-sm">
-        <CardContent className="p-6">
-          <div className="text-center">
-            <div className="text-4xl mb-2">🤖</div>
-            <h3 className="text-lg font-semibold text-white mb-2">
-              AI Recommendations
-            </h3>
-            <p className="text-gray-300 text-sm mb-4">
-              {error || "No recommendations available at the moment"}
-            </p>
-            <Button
-              onClick={loadRecommendations}
-              variant="outline"
-              size="sm"
-              className="border-green-500 text-green-300 hover:bg-green-700/30"
-            >
-              Try Again
-            </Button>
-          </div>
+        <CardContent className="p-6 text-center">
+          <div className="text-4xl mb-2">🤖</div>
+          <h3 className="text-lg font-semibold text-white mb-2">
+            AI Recommendations
+          </h3>
+          <p className="text-gray-300 text-sm mb-4">
+            {error || "No recommendations available at the moment"}
+          </p>
+          <Button
+            onClick={loadRecommendations}
+            variant="outline"
+            size="sm"
+            className="border-green-500 text-green-300 hover:bg-green-700/30"
+          >
+            Try Again
+          </Button>
         </CardContent>
       </Card>
     );
@@ -158,7 +117,7 @@ export function BookRecommendationsWidget({
               </h3>
               <p className="text-green-200 text-sm">
                 {isAuthenticated
-                  ? "AI-powered recommendations"
+                  ? "AI-powered suggestions"
                   : "Trending in the community"}
               </p>
             </div>
@@ -178,8 +137,8 @@ export function BookRecommendationsWidget({
           {recommendations.map((rec) => (
             <div
               key={rec.bookId}
-              className="flex items-start gap-3 p-3 rounded-lg bg-green-900/20 hover:bg-green-900/30 cursor-pointer transition-colors"
               onClick={() => handleBookClick(rec.bookId)}
+              className="flex items-start gap-3 p-3 rounded-lg bg-green-900/20 hover:bg-green-900/30 cursor-pointer transition-colors"
             >
               <img
                 src={rec.cover}
@@ -213,7 +172,7 @@ export function BookRecommendationsWidget({
         {isAuthenticated && (
           <div className="mt-6 pt-4 border-t border-green-700/40 text-center">
             <p className="text-gray-400 text-xs mb-2">
-              Recommendations improve as you read more books
+              Recommendations improve as you read more
             </p>
             <Button
               variant="ghost"
@@ -229,50 +188,32 @@ export function BookRecommendationsWidget({
   );
 }
 
-// Quick recommendation snippet
+/* --- Quick Recommendation Snippet --- */
 export function QuickRecommendation() {
-  const [recommendation, setRecommendation] = useState<BookRecommendation | null>(
-    null
-  );
+  const [rec, setRec] = useState<BookRecommendation | null>(null);
   const { user } = useAuth();
 
   useEffect(() => {
-    const loadQuickRec = async () => {
+    const loadQuick = async () => {
       try {
-        const engine = AIRecommendationEngine.getInstance();
-        const preferences = user
-          ? await getUserPreferences(user.email)
-          : {
-              categories: [],
-              languages: ["EN"],
-              difficultyLevel: "mixed" as const,
-              readingHistory: [],
-              bookmarks: [],
-              searchHistory: [],
-              timeSpent: {},
-            };
-
-        const context = {
-          timeOfDay: "morning" as const,
-          sessionType: "quick_read" as const,
-        };
-
-        const recs = await engine.getRecommendations(preferences, context, 1);
-        if (recs.length > 0) setRecommendation(recs[0]);
-      } catch (error) {
-        console.error("Failed to load quick recommendation:", error);
+        const quick = await getAIRecommendations(
+          { user, category: undefined },
+          1
+        );
+        if (quick.length > 0) setRec(quick[0]);
+      } catch (err) {
+        console.error("Quick recommendation error:", err);
       }
     };
-
-    loadQuickRec();
+    loadQuick();
   }, [user]);
 
-  if (!recommendation) return null;
+  if (!rec) return null;
 
   return (
     <div className="flex items-center gap-2 text-sm">
       <span className="text-green-400">📖</span>
-      <span className="text-white">{recommendation.title}</span>
+      <span className="text-white">{rec.title}</span>
       <span className="text-gray-400">recommended</span>
     </div>
   );
