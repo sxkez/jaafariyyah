@@ -5,14 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion, AnimatePresence } from "framer-motion";
 
-// 🔹 Sample Playlists (move this to /data/playlists.ts later)
+// 🔹 Sample Playlists
 const samplePlaylists = [
   {
     id: 1,
     title: "Adalat al-Sahaba in the Quran",
     teacher: "Sayyid Ali Abu al-Hasan",
-    description:
-      "The Uprightness of the Companions in the Qurʾān...",
+    description: "The Uprightness of the Companions in the Qurʾān...",
     category: "Aqidah / Ethics",
     episodes: 8,
     videoUrls: {
@@ -23,8 +22,7 @@ const samplePlaylists = [
     id: 2,
     title: "طريق معرفة الحق بين المذاهب الإسلامية",
     teacher: "السيد علي أبو الحسن",
-    description:
-      "كيفية معرفة الحق بين المذاهب الإسلامية",
+    description: "كيفية معرفة الحق بين المذاهب الإسلامية",
     category: "Aqeedah",
     episodes: 37,
     videoUrls: {
@@ -35,23 +33,19 @@ const samplePlaylists = [
 
 // 🔹 Extract YouTube thumbnail
 function getYoutubeThumbnail(url?: string) {
-  if (!url) {
-    return "https://via.placeholder.com/480x360?text=No+Thumbnail";
-  }
+  if (!url) return "https://via.placeholder.com/480x360?text=No+Thumbnail";
 
   try {
-    // Extract ?v=VIDEOID
     const videoMatch = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
     if (videoMatch) {
       return `https://img.youtube.com/vi/${videoMatch[1]}/hqdefault.jpg`;
     }
 
-    // If it's a playlist (list=...), use generic
+    // Playlist fallback
     if (url.includes("list=")) {
       return "https://via.placeholder.com/480x360?text=Playlist";
     }
 
-    // Default fallback
     return "https://via.placeholder.com/480x360?text=Video";
   } catch {
     return "https://via.placeholder.com/480x360?text=Error";
@@ -73,6 +67,11 @@ function VideoPlayerModal({
   selectedEpisode: number;
 }) {
   if (!isOpen || !playlist) return null;
+
+  // Get the selected video URL safely
+  const videoUrl =
+    playlist.videoUrls[selectedLanguage as keyof typeof playlist.videoUrls] ||
+    Object.values(playlist.videoUrls)[0]; // fallback
 
   return (
     <AnimatePresence>
@@ -108,11 +107,7 @@ function VideoPlayerModal({
               {/* Video */}
               <div className="aspect-video bg-black rounded-lg mb-4 overflow-hidden">
                 <iframe
-                  src={
-                    playlist.videoUrls[
-                      selectedLanguage as keyof typeof playlist.videoUrls
-                    ]
-                  }
+                  src={videoUrl.replace("watch?v=", "embed/")}
                   title={`${playlist.title} - Episode ${selectedEpisode}`}
                   className="w-full h-full"
                   allowFullScreen
@@ -131,9 +126,16 @@ function VideoPlayerModal({
 
 // 📺 Playlist Card
 function PlaylistCard({ playlist }: { playlist: typeof samplePlaylists[0] }) {
-  const [selectedLanguage, setSelectedLanguage] = useState("EN");
+  const [selectedLanguage, setSelectedLanguage] = useState(
+    Object.keys(playlist.videoUrls)[0] // auto pick available lang
+  );
   const [selectedEpisode, setSelectedEpisode] = useState(1);
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
+
+  const thumbnail =
+    getYoutubeThumbnail(
+      playlist.videoUrls[selectedLanguage as keyof typeof playlist.videoUrls]
+    ) || getYoutubeThumbnail(Object.values(playlist.videoUrls)[0]);
 
   return (
     <>
@@ -147,7 +149,7 @@ function PlaylistCard({ playlist }: { playlist: typeof samplePlaylists[0] }) {
                 onClick={() => setIsPlayerOpen(true)}
               >
                 <img
-                  src={getYoutubeThumbnail(playlist.videoUrls.EN)}
+                  src={thumbnail}
                   alt={playlist.title}
                   className="w-full h-full object-cover"
                 />
@@ -170,7 +172,7 @@ function PlaylistCard({ playlist }: { playlist: typeof samplePlaylists[0] }) {
 
                 {/* Language Toggle */}
                 <div className="flex gap-2 mb-3">
-                  {["AR", "UR", "EN"].map((lang) => (
+                  {Object.keys(playlist.videoUrls).map((lang) => (
                     <Button
                       key={lang}
                       size="sm"
@@ -187,24 +189,24 @@ function PlaylistCard({ playlist }: { playlist: typeof samplePlaylists[0] }) {
 
                 {/* Episodes Pills */}
                 <div className="mb-3">
-                <p className="text-sm text-gray-400 mb-2">Episodes:</p>
-                <div className="flex flex-wrap gap-2">
-                  {Array.from({ length: playlist.episodes }, (_, i) => (
-                    <button
-                      key={i + 1}
-                      onClick={() => setSelectedEpisode(i + 1)}
-                      className={`px-3 py-1 rounded-full text-xs font-medium transition 
-                        ${
-                          selectedEpisode === i + 1
-                            ? "bg-green-600 text-white shadow-lg"
-                            : "bg-green-800/30 text-gray-300 hover:bg-green-700/50"
-                        }`}
-                    >
-                      {i + 1}
-                    </button>
-                  ))}
+                  <p className="text-sm text-gray-400 mb-2">Episodes:</p>
+                  <div className="grid grid-cols-6 gap-2">
+                    {Array.from({ length: playlist.episodes }, (_, i) => (
+                      <button
+                        key={i + 1}
+                        onClick={() => setSelectedEpisode(i + 1)}
+                        className={`px-3 py-1 rounded-full text-xs font-medium transition 
+                          ${
+                            selectedEpisode === i + 1
+                              ? "bg-green-600 text-white shadow-lg"
+                              : "bg-green-800/30 text-gray-300 hover:bg-green-700/50"
+                          }`}
+                      >
+                        {i + 1}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
                 <Button
                   size="sm"
