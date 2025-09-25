@@ -57,7 +57,7 @@ export default function RootLayout({
             <Sidebar />
 
             {/* Page content */}
-            <main className="flex-1 md:pl-72 p-6 transition-all duration-300">
+            <main className="flex-1 min-h-screen md:pl-72 p-6 transition-all duration-300 bg-gradient-to-br from-green-950 via-emerald-950 to-black">
               {children}
             </main>
           </div>
