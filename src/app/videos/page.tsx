@@ -41,7 +41,6 @@ function getYoutubeThumbnail(url?: string) {
       return `https://img.youtube.com/vi/${videoMatch[1]}/hqdefault.jpg`;
     }
 
-    // Playlist fallback
     if (url.includes("list=")) {
       return "https://via.placeholder.com/480x360?text=Playlist";
     }
@@ -50,6 +49,29 @@ function getYoutubeThumbnail(url?: string) {
   } catch {
     return "https://via.placeholder.com/480x360?text=Error";
   }
+}
+
+// 🔹 Convert YouTube URL → embed format with episode index
+function toEmbedUrl(url: string, episode: number = 1) {
+  if (!url) return "";
+
+  const videoMatch = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+  const listMatch = url.match(/[?&]list=([a-zA-Z0-9_-]+)/);
+
+  const videoId = videoMatch ? videoMatch[1] : null;
+  const playlistId = listMatch ? listMatch[1] : null;
+
+  if (videoId && playlistId) {
+    return `https://www.youtube.com/embed/${videoId}?list=${playlistId}&index=${episode}`;
+  }
+  if (playlistId) {
+    return `https://www.youtube.com/embed/videoseries?list=${playlistId}&index=${episode}`;
+  }
+  if (videoId) {
+    return `https://www.youtube.com/embed/${videoId}`;
+  }
+
+  return url;
 }
 
 // 🎥 Video Player Modal
@@ -68,7 +90,6 @@ function VideoPlayerModal({
 }) {
   if (!isOpen || !playlist) return null;
 
-  // Get the selected video URL safely
   const videoUrl =
     playlist.videoUrls[selectedLanguage as keyof typeof playlist.videoUrls] ||
     Object.values(playlist.videoUrls)[0]; // fallback
@@ -107,10 +128,11 @@ function VideoPlayerModal({
               {/* Video */}
               <div className="aspect-video bg-black rounded-lg mb-4 overflow-hidden">
                 <iframe
-                  src={videoUrl.replace("watch?v=", "embed/")}
+                  src={toEmbedUrl(videoUrl, selectedEpisode)}
                   title={`${playlist.title} - Episode ${selectedEpisode}`}
                   className="w-full h-full"
                   allowFullScreen
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 />
               </div>
 
@@ -127,7 +149,7 @@ function VideoPlayerModal({
 // 📺 Playlist Card
 function PlaylistCard({ playlist }: { playlist: typeof samplePlaylists[0] }) {
   const [selectedLanguage, setSelectedLanguage] = useState(
-    Object.keys(playlist.videoUrls)[0] // auto pick available lang
+    Object.keys(playlist.videoUrls)[0]
   );
   const [selectedEpisode, setSelectedEpisode] = useState(1);
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
