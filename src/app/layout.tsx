@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     siteName: "Al Ja‘fariyya",
     images: [
       {
-        url: "https://imgur.com/a/ySl8qpG",
+        url: "https://i.imgur.com/a/ySl8qpG",
         width: 1200,
         height: 630,
         alt: "Al Ja‘fariyya Logo",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     title: "Al Ja‘fariyya – Twelver Shi‘i Community",
     description:
       "Explore resources on Shi‘i theology, fiqh, hadith, and spirituality with fellow students of knowledge.",
-    images: ["https://ext.same-assets.com/4138622892/og-jafariyya.png"],
+    images: ["https://i.imgur.com/a/ySl8qpG"],
   },
 };
 
@@ -53,11 +53,13 @@ export default function RootLayout({
       <body className={`${geist.variable} ${geistMono.variable} antialiased`}>
         <AuthProvider>
           <div className="flex min-h-screen">
-            {/* Sidebar stays consistent */}
+            {/* Sidebar stays fixed */}
             <Sidebar />
-            
-            {/* Dynamic page content */}
-            <main className="flex-1">{children}</main>
+
+            {/* Page content */}
+            <main className="flex-1 md:pl-72 p-6 transition-all duration-300">
+              {children}
+            </main>
           </div>
         </AuthProvider>
       </body>
