@@ -34,12 +34,28 @@ const samplePlaylists = [
 ];
 
 // 🔹 Extract YouTube thumbnail
-function getYoutubeThumbnail(url: string) {
-  const match = url.match(/v=([a-zA-Z0-9_-]{11})/); // extract first video id
-  const videoId = match ? match[1] : null;
-  return videoId
-    ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
-    : "https://via.placeholder.com/480x360?text=Video";
+function getYoutubeThumbnail(url?: string) {
+  if (!url) {
+    return "https://via.placeholder.com/480x360?text=No+Thumbnail";
+  }
+
+  try {
+    // Extract ?v=VIDEOID
+    const videoMatch = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+    if (videoMatch) {
+      return `https://img.youtube.com/vi/${videoMatch[1]}/hqdefault.jpg`;
+    }
+
+    // If it's a playlist (list=...), use generic
+    if (url.includes("list=")) {
+      return "https://via.placeholder.com/480x360?text=Playlist";
+    }
+
+    // Default fallback
+    return "https://via.placeholder.com/480x360?text=Video";
+  } catch {
+    return "https://via.placeholder.com/480x360?text=Error";
+  }
 }
 
 // 🎥 Video Player Modal
