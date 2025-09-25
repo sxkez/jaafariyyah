@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import { ScanTopic } from "@/data/scanTopics";
 
-export default function TopicClient({ data }: { data: any }) {
+export default function TopicClient({ data }: { data: ScanTopic }) {
   const [currentIndex, setCurrentIndex] = useState<number | null>(null);
 
   const handleNext = () => {
@@ -20,7 +21,7 @@ export default function TopicClient({ data }: { data: any }) {
     }
   };
 
-  // 🔑 Keyboard nav
+  // ⌨ Keyboard navigation
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (currentIndex !== null) {
@@ -36,50 +37,63 @@ export default function TopicClient({ data }: { data: any }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-950 via-emerald-950 to-black text-white px-6 py-12">
       {/* Back Button */}
-      <div className="mb-6">
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-8"
+      >
         <Button
           asChild
           className="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md flex items-center gap-2"
         >
           <Link href="/scans">← Back to Scans</Link>
         </Button>
-      </div>
+      </motion.div>
 
       {/* Header */}
-      <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-emerald-500">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center mb-12"
+      >
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-emerald-500 drop-shadow">
           {data.term} • {data.arabic}
         </h1>
         {data.category && (
-          <p className="text-green-400 font-medium mb-2">{data.category}</p>
+          <span className="inline-block px-3 py-1 mb-4 text-sm font-medium rounded-full bg-green-800/40 border border-green-600/50 text-green-300 shadow-md">
+            {data.category}
+          </span>
         )}
-        <p className="text-gray-300 text-lg max-w-3xl mx-auto">
+        <p className="text-gray-300 text-lg max-w-3xl mx-auto leading-relaxed">
           {data.description}
         </p>
-      </div>
+      </motion.div>
 
       {/* Grid of scans */}
       {data.scans && data.scans.length > 0 ? (
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {data.scans.map((scan: any, idx: number) => (
+        <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+          {data.scans.map((scan, idx) => (
             <motion.div
               key={idx}
-              whileHover={{ scale: 1.05 }}
-              className="bg-green-900/30 border border-green-700/30 rounded-xl overflow-hidden shadow-md hover:shadow-green-500/20 transition"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.1 }}
+              whileHover={{ scale: 1.03 }}
+              className="bg-green-900/30 border border-green-700/40 rounded-xl overflow-hidden shadow-md hover:shadow-green-500/30 transition-all"
             >
               <img
                 src={scan.img}
                 alt={scan.caption}
-                className="w-full h-64 object-contain bg-black/20 cursor-pointer"
+                className="w-full h-72 object-contain bg-black/30 cursor-pointer"
                 onClick={() => setCurrentIndex(idx)}
               />
-              <div className="p-4">
-                <p className="text-sm text-gray-200 font-semibold mb-2">
+              <div className="p-5 flex flex-col items-center">
+                <p className="text-sm text-gray-200 font-semibold text-center mb-4">
                   {scan.caption}
                 </p>
                 <Button
                   onClick={() => setCurrentIndex(idx)}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white flex items-center justify-center gap-2"
+                  className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-medium rounded-lg shadow-md"
                 >
                   👁️ View Scan
                 </Button>
@@ -106,7 +120,7 @@ export default function TopicClient({ data }: { data: any }) {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-green-950 border border-green-700 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+              className="bg-green-950 border border-green-700 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-xl"
             >
               {/* Header */}
               <div className="flex justify-between items-center p-4 border-b border-green-700">
@@ -121,19 +135,19 @@ export default function TopicClient({ data }: { data: any }) {
                 </button>
               </div>
 
-              {/* Scan */}
+              {/* Scan Image */}
               <div className="p-6 text-center">
                 <img
                   src={data.scans[currentIndex].img}
                   alt={data.scans[currentIndex].caption}
-                  className="rounded-lg mb-4 max-h-[60vh] mx-auto"
+                  className="rounded-lg mb-6 max-h-[60vh] mx-auto shadow-lg"
                 />
                 <p className="text-gray-300 text-sm leading-relaxed">
                   {data.scans[currentIndex].context}
                 </p>
               </div>
 
-              {/* Nav */}
+              {/* Navigation */}
               <div className="flex justify-between items-center p-4 border-t border-green-700">
                 <Button
                   onClick={handlePrev}

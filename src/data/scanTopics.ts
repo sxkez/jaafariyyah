@@ -45,11 +45,37 @@ export const scanTopics: ScanTopic[] = [
           "Al-Shaykh Ali Ale Muhsin says in the Muqadima of Shaykh Ahmad Salman's Kitab al-Waseela, pg. 6, Although tawassul is a jurisprudential matter unrelated to creed as it pertains to the acts of the obligated individuals, Ibn Taymiyyah and his followers categorized it under creed, exaggerated its implications, and ruled that tawassul through the dead, seeking their intercession, and requesting needs from them constitutes major shirk that expels one from the fold of Islam.",
       },
       {
+        img: "https://i.imgur.com/SJ7h16c",
+        caption: "Visiting the Prophet's grave",
+        context:
+          "Sahih b. Hibban Vol 12, pg. 506, Hadith # 5694, 5694 - Abu Ya‘la informed us, he said: Abu Musa Muhammad ibn al-Muthanna narrated to us, he said: Wahb ibn Jarir narrated to us, he said: My father narrated to us, he said: I heard Muhammad ibn Ishaq narrating from Salih ibn Kaysan, from Ubayd Allah ibn Abd Allah, he said: I saw Usama ibn Zayd praying near the grave of the Messenger of Allah, and Marwan ibn al-Hakam came out and said: “Are you praying towards his grave?” He replied: “I love him.” So Marwan said to him an offensive word, then turned away. Usama turned back and said: “O Marwan, you have hurt me, and I heard the Messenger of Allah say: ‘Indeed, Allah hates the obscene and the excessively obscene, and you are obscene and excessively obscene.’” [2:109]",
+      },
+      {
         img: "https://i.imgur.com/d3LVAOk.jpg",
         caption: "Ibn Hanbal doing Istighatha",
         context:
           "Al-Jami’ li-’Ulum al-Imam Ahmad, vol. 8, pg. 74, Abdullah said: I heard my father say: “I performed five Hajj pilgrimages—two of them while riding and three while walking, or two while walking and three while riding. During one of the pilgrimages, I lost my way while walking, so I began saying: ‘O servants of Allah, guide us to the path!’ I kept saying that until I found the road.”",
       },
+      {
+        img: "https://imgur.com/ZUG8lGj",
+        caption: "The Departed Still Listen",
+        context:
+          "Majma’ Al-Fatawa Vol. 12, Pg 492 by Ibn Taymiyyah, The Salaf made lots of mistakes in lots of issues, and it is agreed that this does not make them disbelievers. For instance, some of the companions denied that the dead can hear the call of the living; some of them denied that the Mi’raaj occurred in a state of wakefulness; some of them denied that Muhammad (sawa) saw his Lord; the opinions of some of them on Khilafah and Tafdheel are well known, as well as the fighting of some by others and the cursing of some by others and the declaring of some by others as Kuffar! These are well known statements.",
+      },
+      {
+        img: "https://i.imgur.com/d3LVAOk.jpg",
+        caption: "Ibn Taymiyyah: The Dead Recognize Visitors and Respond",
+        context: `
+        Majma’ Al-Fatawa Vol. 24, Pg 185 by Ibn Taymiyyah:
+
+        He was asked: "If living people have visited the dead ones, do they know about their visit and do they know about the death of any of their relatives or others?" Then he replied: "Praise be to Allah (swt)! Yes, traditions came with narrations about their meeting, their questioning and the display of the alive ones." Works to the dead, As narrated by Ibn Al-Mubarak from Abu Ayyub Al-Ansari: He said: "When the soul of the believer is taken, Allah's (swt) servants receive it with mercy like when they receive a messenger of glad tidings in this world. They draw nigh to him and ask him and then they would tell each other: 'Let your brother rest, as he was in great distress.'"
+
+        He said: They draw nigh and ask him, so what did such and such man do? And what did such and such woman do? Did she get married? However, regarding the awareness of the dead when the alive ones visit him and greet him, the narration of Ibn Abbas said: "The Messenger of Allah (sawa) said: "No one passes by the grave of his believer brother, whom he used to know in this world, and greets him, but the dead would recognise him and greets him back."
+
+        Ibn Al-Mubarak said: It is sure that it came through The Prophet (sawa) and it was verified by Abdul-Haqq the writer of Al-Ahkam.
+        `
+      }
+
     ],
   },
 
