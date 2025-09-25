@@ -14,6 +14,7 @@ import {
   updateDoc,
   doc,
   increment,
+  type Timestamp,
 } from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
 
@@ -24,13 +25,21 @@ interface ForumPost {
   authorAvatar: string;
   content: string;
   category: string;
-  tags: string[];
-  createdAt: any;
+  tags?: string[];
+  createdAt: ForumTimestamp;
   likes: number;
   replies: number;
   isPinned: boolean;
-  lastActivity: any;
+  lastActivity: ForumTimestamp;
 }
+
+type ForumTimestamp = Timestamp | Date | string | null;
+
+const isFirestoreTimestamp = (value: unknown): value is Timestamp =>
+  typeof value === "object" &&
+  value !== null &&
+  "toDate" in value &&
+  typeof (value as { toDate?: unknown }).toDate === "function";
 
 const forumCategories = [
   { id: "all", name: "All Discussions", icon: "💬" },
@@ -53,10 +62,17 @@ function PostCard({
 }) {
   const { user } = useAuth();
 
-  const formatTimeAgo = (date: any) => {
+  const formatTimeAgo = (date: ForumTimestamp) => {
     if (!date) return "just now";
+    const postDate = (() => {
+      if (date instanceof Date) return date;
+      if (typeof date === "string") return new Date(date);
+      if (isFirestoreTimestamp(date)) return date.toDate();
+      return null;
+    })();
+
+    if (!postDate) return "just now";
     const now = new Date();
-    const postDate = date.toDate ? date.toDate() : new Date(date);
     const diffMs = now.getTime() - postDate.getTime();
     const diffMins = Math.floor(diffMs / (1000 * 60));
     const diffHours = Math.floor(diffMins / 60);
@@ -204,10 +220,12 @@ export default function ForumPage() {
       content: newContent,
       category: newCategory,
       tags: [],
-      author: user.displayName || user.email,
+      author: user.name || user.email,
       authorAvatar:
-        user.photoURL ||
-        `https://ui-avatars.com/api/?name=${user.displayName || "User"}`,
+        user.avatar ||
+        `https://ui-avatars.com/api/?name=${encodeURIComponent(
+          user.name || user.email || "User"
+        )}`,
       likes: 0,
       replies: 0,
       isPinned: false,

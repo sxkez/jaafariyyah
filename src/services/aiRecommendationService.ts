@@ -28,6 +28,36 @@ export interface RecommendationContext {
   sessionType: 'quick_read' | 'deep_study' | 'casual_browse';
 }
 
+interface BookRecord {
+  id: number | string;
+  title: string;
+  author: string;
+  category: string;
+  language: string;
+  rating: number;
+  tags: string[];
+  cover: string;
+}
+
+export interface RecommendationRequest {
+  user: {
+    name?: string | null;
+    email?: string | null;
+  } | null;
+  category?: string;
+  currentBook?: string;
+}
+
+const createDefaultPreferences = (): UserPreferences => ({
+  categories: [],
+  languages: ['EN'],
+  difficultyLevel: 'mixed',
+  readingHistory: [],
+  bookmarks: [],
+  searchHistory: [],
+  timeSpent: {},
+});
+
 /**
  * Advanced AI recommendation engine using multiple factors
  */
@@ -105,7 +135,7 @@ export class AIRecommendationEngine {
    * Content-based filtering: Recommend books similar to user's preferences
    */
   private contentBasedFiltering(
-    books: any[],
+    books: BookRecord[],
     prefs: UserPreferences
   ): BookRecommendation[] {
     return books
@@ -141,7 +171,7 @@ export class AIRecommendationEngine {
    * Collaborative filtering: Recommend books liked by similar users
    */
   private collaborativeFiltering(
-    books: any[],
+    books: BookRecord[],
     prefs: UserPreferences
   ): BookRecommendation[] {
     // Simulate collaborative filtering based on reading patterns
@@ -166,7 +196,7 @@ export class AIRecommendationEngine {
    * Contextual filtering: Recommend based on current context
    */
   private contextualFiltering(
-    books: any[],
+    books: BookRecord[],
     context: RecommendationContext
   ): BookRecommendation[] {
     return books
@@ -195,7 +225,7 @@ export class AIRecommendationEngine {
   /**
    * Get trending books based on community activity
    */
-  private getTrendingBooks(books: any[]): BookRecommendation[] {
+  private getTrendingBooks(books: BookRecord[]): BookRecommendation[] {
     // Simulate trending based on category popularity and ratings
     const trendingCategories = ['jurisprudence', 'creed', 'hadith'];
 
@@ -242,7 +272,7 @@ export class AIRecommendationEngine {
   }
 
   // Helper methods
-  private generateContentReason(book: any, prefs: UserPreferences): string {
+  private generateContentReason(book: BookRecord, prefs: UserPreferences): string {
     if (prefs.categories.includes(book.category)) {
       return `Matches your interest in ${book.category}`;
     }
@@ -252,7 +282,7 @@ export class AIRecommendationEngine {
     return "Highly rated classical text";
   }
 
-  private generateContextReason(book: any, context: RecommendationContext): string {
+  private generateContextReason(book: BookRecord, context: RecommendationContext): string {
     if (context.sessionType === 'quick_read') {
       return "Perfect for a quick study session";
     }
@@ -265,7 +295,7 @@ export class AIRecommendationEngine {
     return "Recommended for your current session";
   }
 
-  private calculateContentConfidence(book: any, prefs: UserPreferences): number {
+  private calculateContentConfidence(book: BookRecord, prefs: UserPreferences): number {
     let confidence = 0.5;
 
     if (prefs.categories.includes(book.category)) confidence += 0.2;
@@ -276,7 +306,7 @@ export class AIRecommendationEngine {
     return Math.min(1, confidence);
   }
 
-  private getDifficulty(book: any): 'beginner' | 'intermediate' | 'advanced' {
+  private getDifficulty(book: BookRecord): 'beginner' | 'intermediate' | 'advanced' {
     if (book.tags.includes('Beginner') || book.tags.includes('Primer')) {
       return 'beginner';
     }
@@ -286,14 +316,14 @@ export class AIRecommendationEngine {
     return 'intermediate';
   }
 
-  private estimateReadingTime(book: any): string {
+  private estimateReadingTime(book: BookRecord): string {
     const minutes = this.getReadingTimeMinutes(book);
     if (minutes < 60) return `${minutes} min`;
     const hours = Math.round(minutes / 60);
     return `${hours}h`;
   }
 
-  private getReadingTimeMinutes(book: any): number {
+  private getReadingTimeMinutes(book: BookRecord): number {
     // Estimate based on category and tags
     if (book.tags.includes('Primer')) return 45;
     if (book.tags.includes('Reference')) return 180;
@@ -307,7 +337,7 @@ export class AIRecommendationEngine {
     return ['1', '3', '5', '7', '9']; // Mock similar user preferences
   }
 
-  private getBookDatabase(): any[] {
+  private getBookDatabase(): BookRecord[] {
     // This would typically come from a database
     // For now, return mock data matching our books
     return [
@@ -325,7 +355,7 @@ export class AIRecommendationEngine {
     ];
   }
 
-  private getFallbackRecommendations(limit: number): BookRecommendation[] {
+  public getFallbackRecommendations(limit: number): BookRecommendation[] {
     return [
       {
         bookId: "1",
@@ -345,8 +375,39 @@ export class AIRecommendationEngine {
 /**
  * Get user preferences from various sources
  */
+export async function getAIRecommendations(
+  request: RecommendationRequest,
+  limit: number = 5
+): Promise<BookRecommendation[]> {
+  const engine = AIRecommendationEngine.getInstance();
+  const userId = resolveUserId(request.user);
+  const preferences = await getUserPreferences(userId);
+
+  const context: RecommendationContext = {
+    currentBook: request.currentBook,
+    currentCategory: request.category,
+    timeOfDay: getCurrentTimeOfDay(),
+    sessionType: determineSessionType(request.user),
+  };
+
+  const recommendations = await engine.getRecommendations(
+    preferences,
+    context,
+    limit
+  );
+
+  if (recommendations.length > 0) {
+    return recommendations;
+  }
+
+  return engine.getFallbackRecommendations(limit);
+}
+
 export async function getUserPreferences(userId: string): Promise<UserPreferences> {
   try {
+    if (typeof window === 'undefined') {
+      return createDefaultPreferences();
+    }
     // In reality, this would fetch from user profile, analytics, etc.
     const stored = localStorage.getItem(`user-preferences-${userId}`);
     if (stored) {
@@ -357,28 +418,35 @@ export async function getUserPreferences(userId: string): Promise<UserPreference
   }
 
   // Return default preferences
-  return {
-    categories: [],
-    languages: ['EN'],
-    difficultyLevel: 'mixed',
-    readingHistory: [],
-    bookmarks: [],
-    searchHistory: [],
-    timeSpent: {}
-  };
+  return createDefaultPreferences();
 }
 
 /**
  * Update user preferences based on actions
  */
-export function updateUserPreferences(
+export async function updateUserPreferences(
   userId: string,
   updates: Partial<UserPreferences>
-): void {
+): Promise<void> {
   try {
-    const current = getUserPreferences(userId);
-    const updated = { ...current, ...updates };
-    localStorage.setItem(`user-preferences-${userId}`, JSON.stringify(updated));
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const current = await getUserPreferences(userId);
+    const updated: UserPreferences = {
+      ...current,
+      ...updates,
+      timeSpent: {
+        ...current.timeSpent,
+        ...(updates.timeSpent ?? {}),
+      },
+    };
+
+    localStorage.setItem(
+      `user-preferences-${userId}`,
+      JSON.stringify(updated)
+    );
   } catch (error) {
     console.error('Failed to update user preferences:', error);
   }
@@ -425,8 +493,32 @@ export async function trackUserInteraction(
         break;
     }
 
-    updateUserPreferences(userId, prefs);
+    await updateUserPreferences(userId, prefs);
   } catch (error) {
     console.error('Failed to track user interaction:', error);
   }
+}
+
+function determineSessionType(
+  user: RecommendationRequest['user']
+): RecommendationContext['sessionType'] {
+  if (!user) {
+    return 'casual_browse';
+  }
+  return 'deep_study';
+}
+
+function getCurrentTimeOfDay(): RecommendationContext['timeOfDay'] {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'morning';
+  if (hour < 17) return 'afternoon';
+  if (hour < 21) return 'evening';
+  return 'night';
+}
+
+function resolveUserId(user: RecommendationRequest['user']): string {
+  if (!user) {
+    return 'guest';
+  }
+  return (user.email || user.name || 'guest').toString();
 }
