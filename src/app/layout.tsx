@@ -1,18 +1,7 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
 import { AuthProvider } from "@/contexts/AuthContext";
-
-const geist = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "𝘼𝙡 𝙅𝙖‘𝙛𝙖𝙧𝙞𝙮𝙮𝙖 (الجعفرية)",
@@ -50,9 +39,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" dir="ltr" className="dark">
-      <body
-        className={`${geist.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-green-950 via-emerald-950 to-black`}
-      >
+      <body className="antialiased bg-gradient-to-br from-green-950 via-emerald-950 to-black font-sans">
         <AuthProvider>
           <div className="flex min-h-screen">
             {/* Sidebar (fixed width on desktop, overlay on mobile) */}

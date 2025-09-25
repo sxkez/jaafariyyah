@@ -8,7 +8,10 @@ export async function generateStaticParams() {
 }
 
 export default function TopicPage({ params }: { params: { topic: string } }) {
-  const topic = scanTopics.find((t) => t.term === params.topic);
+  const topicParam = decodeURIComponent(params.topic);
+  const topic = scanTopics.find(
+    (entry) => entry.term.toLowerCase() === topicParam.toLowerCase()
+  );
   if (!topic) return notFound();
 
   return <TopicClient topic={topic} />;

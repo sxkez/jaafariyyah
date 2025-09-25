@@ -22,11 +22,11 @@ export default function ScansPage() {
 
         {/* Categories Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
-          {scanCategories.map((category, idx) => (
+          {scanCategories.map((category) => (
             <Card
-              key={idx}
-              className="bg-green-900/30 border-green-600/30 backdrop-blur-sm 
-                         hover:shadow-lg hover:shadow-green-600/20 
+              key={category.id}
+              className="bg-green-900/30 border-green-600/30 backdrop-blur-sm
+                         hover:shadow-lg hover:shadow-green-600/20
                          hover:border-green-500/50 transition-all duration-300"
             >
               <CardContent className="p-6 flex flex-col justify-between">
@@ -37,15 +37,15 @@ export default function ScansPage() {
                     </span>
                   </div>
                   <h3 className="text-white font-bold text-xl mb-2">
-                    {category.category}
+                    {category.name}
                   </h3>
                   <p className="text-gray-300 text-sm mb-6 leading-relaxed">
-                    {category.topics.length} topics available
+                    {category.description}
                   </p>
                 </div>
-                <Link href={`/scans/${category.category.toLowerCase()}`}>
+                <Link href={`/scans/${category.id}`}>
                   <Button className="w-full bg-green-600 hover:bg-green-700 text-white py-3">
-                    📂 Open {category.category}
+                    📂 Open {category.name} ({category.topics.length})
                   </Button>
                 </Link>
               </CardContent>

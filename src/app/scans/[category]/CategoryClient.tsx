@@ -2,15 +2,14 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
-import type { ScanTopic } from "@/data/scanTopics";
+import type { CategorizedScanTopic } from "@/data/scanTopics";
 
 export default function CategoryClient({
   category,
   topics,
 }: {
   category: string;
-  topics: ScanTopic[];
+  topics: CategorizedScanTopic[];
 }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-950 via-emerald-950 to-black text-white px-6 py-12">
@@ -30,10 +29,9 @@ export default function CategoryClient({
       {/* Topics */}
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {topics.map((topic) => (
-          <motion.div
+          <div
             key={topic.id}
-            whileHover={{ scale: 1.05 }}
-            className="bg-green-900/30 border border-green-700/30 rounded-xl p-6 hover:bg-green-900/50 transition"
+            className="bg-green-900/30 border border-green-700/30 rounded-xl p-6 transition-transform duration-200 hover:scale-105 hover:bg-green-900/50"
           >
             <h2 className="text-xl font-semibold mb-2">
               {topic.term} • {topic.arabic}
@@ -42,7 +40,7 @@ export default function CategoryClient({
             <Button asChild className="w-full bg-green-600 hover:bg-green-700">
               <Link href={`/scans/${topic.term}`}>📖 Open Topic</Link>
             </Button>
-          </motion.div>
+          </div>
         ))}
       </div>
     </div>
