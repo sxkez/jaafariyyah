@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { AuthModal } from "@/components/AuthModal";
 
-// Instagram profile link
 const INSTAGRAM_URL = "https://instagram.com/jaafariyyah";
 
 // 🌌 Starfield background
@@ -136,7 +135,7 @@ export function Sidebar() {
 
   return (
     <>
-      {/* Mobile Menu Button */}
+      {/* Mobile Toggle */}
       <Button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed top-4 left-4 z-50 md:hidden bg-green-600 hover:bg-green-700 text-white shadow-lg"
@@ -148,7 +147,7 @@ export function Sidebar() {
       {/* Sidebar */}
       <div
         className={`
-          fixed md:static top-0 left-0 h-screen w-72
+          fixed top-0 left-0 h-screen w-72
           bg-gradient-to-b from-green-950 via-green-900/95 to-gray-900/90
           border-r border-green-700/40 backdrop-blur-md
           flex flex-col z-40 transform transition-transform duration-300
@@ -157,62 +156,65 @@ export function Sidebar() {
       >
         <SidebarStarField />
 
-        <div className="relative z-10 h-full flex flex-col p-6">
-          {/* Logo */}
-          <div className="mb-8 border-b border-green-700/40 pb-4">
-            <Link href="/" onClick={() => setIsOpen(false)}>
-              <Logo />
-            </Link>
+        <div className="relative z-10 h-full flex flex-col">
+          {/* Content that scrolls */}
+          <div className="flex-1 overflow-y-auto p-6">
+            {/* Logo */}
+            <div className="mb-8 border-b border-green-700/40 pb-4">
+              <Link href="/" onClick={() => setIsOpen(false)}>
+                <Logo />
+              </Link>
+            </div>
+
+            {/* Auth / Profile */}
+            {isAuthenticated ? (
+              <div className="mb-6">
+                <UserProfile />
+              </div>
+            ) : (
+              <div className="mb-6">
+                <div className="bg-green-800/20 rounded-lg p-4 border border-green-600/30 shadow-inner">
+                  <p className="text-white text-sm mb-3">
+                    Join our community to connect with seekers of knowledge.
+                  </p>
+                  <Button
+                    onClick={() => setShowAuthModal(true)}
+                    size="sm"
+                    className="w-full bg-green-600 hover:bg-green-700 text-white shadow"
+                  >
+                    Login / Sign Up
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* Navigation */}
+            <nav className="space-y-2">
+              {navigationItems.map((item) => {
+                const isActive =
+                  pathname === item.href ||
+                  (item.href !== "/" && pathname.startsWith(item.href.replace(/\/$/, "")));
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    className={`flex items-center gap-3 p-3 rounded-md transition-all duration-300 ${
+                      isActive
+                        ? "bg-green-700/30 border-l-4 border-green-400 text-white shadow-md"
+                        : "hover:bg-green-800/30 text-gray-300 hover:text-white"
+                    }`}
+                  >
+                    <span className="text-xl">{item.icon}</span>
+                    <span className="font-medium">{item.label}</span>
+                  </Link>
+                );
+              })}
+            </nav>
           </div>
 
-          {/* User/Profile or Login */}
-          {isAuthenticated ? (
-            <div className="mb-6">
-              <UserProfile />
-            </div>
-          ) : (
-            <div className="mb-6">
-              <div className="bg-green-800/20 rounded-lg p-4 border border-green-600/30 shadow-inner">
-                <p className="text-white text-sm mb-3">
-                  Join our community to connect with seekers of knowledge.
-                </p>
-                <Button
-                  onClick={() => setShowAuthModal(true)}
-                  size="sm"
-                  className="w-full bg-green-600 hover:bg-green-700 text-white shadow"
-                >
-                  Login / Sign Up
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {/* Nav */}
-          <nav className="flex-1 overflow-y-auto space-y-2">
-            {navigationItems.map((item) => {
-              const isActive =
-                pathname === item.href ||
-                (item.href !== "/" && pathname.startsWith(item.href.replace(/\/$/, "")));
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setIsOpen(false)}
-                  className={`flex items-center gap-3 p-3 rounded-md transition-all duration-300 ${
-                    isActive
-                      ? "bg-green-700/30 border-l-4 border-green-400 text-white shadow-md"
-                      : "hover:bg-green-800/30 text-gray-300 hover:text-white"
-                  }`}
-                >
-                  <span className="text-xl">{item.icon}</span>
-                  <span className="font-medium">{item.label}</span>
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* Footer */}
-          <div className="pt-6 border-t border-green-700/40">
+          {/* Footer stays pinned bottom */}
+          <div className="p-6 border-t border-green-700/40">
             <Button
               onClick={handleInstagramFollow}
               className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:opacity-90 text-white py-3 shadow-lg"
@@ -226,7 +228,7 @@ export function Sidebar() {
         </div>
       </div>
 
-      {/* Mobile Overlay */}
+      {/* Overlay for mobile */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-30 md:hidden"
