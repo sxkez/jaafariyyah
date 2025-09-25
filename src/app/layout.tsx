@@ -50,14 +50,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" dir="ltr" className="dark">
-      <body className={`${geist.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geist.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-green-950 via-emerald-950 to-black`}
+      >
         <AuthProvider>
           <div className="flex min-h-screen">
-            {/* Sidebar stays fixed */}
+            {/* Sidebar (fixed width on desktop, overlay on mobile) */}
             <Sidebar />
 
             {/* Page content */}
-            <main className="flex-1 min-h-screen md:pl-72 p-6 transition-all duration-300 bg-gradient-to-br from-green-950 via-emerald-950 to-black">
+            <main className="flex-1 md:ml-72 px-6 py-6 transition-all duration-300">
               {children}
             </main>
           </div>
