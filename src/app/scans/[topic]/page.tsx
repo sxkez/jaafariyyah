@@ -4,15 +4,23 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
 import { scanCategories } from "@/data/scanTopics";
+import { motion, AnimatePresence } from "framer-motion";
+
+// ✅ Generate all static paths for topics
+export async function generateStaticParams() {
+  return scanCategories.flatMap((cat) =>
+    cat.topics.map((topic) => ({ topic: topic.term }))
+  );
+}
 
 export default function TopicPage({ params }: { params: { topic: string } }) {
-  const topic = params.topic;
+  const topicSlug = params.topic;
 
-  // Flatten all topics from categories
-  const allTopics = scanCategories.flatMap((cat) => cat.topics);
-  const data = allTopics.find((t) => t.term === topic);
+  // find topic from all categories
+  const data = scanCategories
+    .flatMap((cat) => cat.topics)
+    .find((t) => t.term === topicSlug);
 
   const [currentIndex, setCurrentIndex] = useState<number | null>(null);
 
@@ -30,7 +38,7 @@ export default function TopicPage({ params }: { params: { topic: string } }) {
     }
   };
 
-  // 🔑 keyboard navigation
+  // 🔑 keyboard nav
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (currentIndex !== null) {
@@ -51,7 +59,9 @@ export default function TopicPage({ params }: { params: { topic: string } }) {
           asChild
           className="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md flex items-center gap-2"
         >
-          <Link href="/scans">← Back to Categories</Link>
+          <Link href={`/scans/${data.category.toLowerCase()}`}>
+            ← Back to {data.category}
+          </Link>
         </Button>
       </div>
 
@@ -60,17 +70,15 @@ export default function TopicPage({ params }: { params: { topic: string } }) {
         <h1 className="text-4xl md:text-5xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-emerald-500">
           {data.term} • {data.arabic}
         </h1>
-        {data.category && (
-          <p className="text-green-400 font-medium mb-2">{data.category}</p>
-        )}
+        <p className="text-green-400 font-medium mb-2">{data.category}</p>
         <p className="text-gray-300 text-lg max-w-3xl mx-auto">
           {data.description}
         </p>
       </div>
 
-      {/* Grid of scans */}
+      {/* Scans */}
       {data.scans && data.scans.length > 0 ? (
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {data.scans.map((scan, idx) => (
             <motion.div
               key={idx}
@@ -118,7 +126,6 @@ export default function TopicPage({ params }: { params: { topic: string } }) {
               exit={{ scale: 0.9, opacity: 0 }}
               className="bg-green-950 border border-green-700 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto"
             >
-              {/* Header */}
               <div className="flex justify-between items-center p-4 border-b border-green-700">
                 <h2 className="text-lg font-semibold text-white">
                   {data.scans[currentIndex].caption}
@@ -131,7 +138,6 @@ export default function TopicPage({ params }: { params: { topic: string } }) {
                 </button>
               </div>
 
-              {/* Scan Image */}
               <div className="p-6 text-center">
                 <img
                   src={data.scans[currentIndex].img}
@@ -143,7 +149,6 @@ export default function TopicPage({ params }: { params: { topic: string } }) {
                 </p>
               </div>
 
-              {/* Navigation */}
               <div className="flex justify-between items-center p-4 border-t border-green-700">
                 <Button
                   onClick={handlePrev}
