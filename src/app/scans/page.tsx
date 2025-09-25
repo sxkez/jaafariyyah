@@ -1,8 +1,19 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-// 🔎 Full list of topics from your screenshots
-const scanTopics = [
+interface ScanTopic {
+  id: number;
+  term: string;
+  arabic: string;
+  description: string;
+  category: string;
+}
+
+const scanTopics: ScanTopic[] = [
   { id: 1, term: "mutah", arabic: "المتعة", description: "Scans on temporary marriage in Shi‘i fiqh.", category: "Fiqh" },
   { id: 2, term: "muawiya", arabic: "معاوية", description: "Scans about Mu‘āwiya ibn Abī Sufyān.", category: "History" },
   { id: 3, term: "nasibism", arabic: "النصب", description: "Scans refuting Nasibism and its claims.", category: "Refutations" },
@@ -41,55 +52,104 @@ const scanTopics = [
   { id: 36, term: "imams", arabic: "الأئمة", description: "Scans on the Twelve Imāms (a).", category: "Imamate" }
 ];
 
-// TopicCard component
-function TopicCard({ topic }: { topic: typeof scanTopics[0] }) {
+function TopicCard({ topic }: { topic: ScanTopic }) {
   return (
-    <Card className="bg-green-900/30 border-green-600/30 backdrop-blur-sm hover:bg-green-900/40 transition-all duration-300">
+    <Card className="bg-green-900/30 border-green-600/30 backdrop-blur-sm hover:shadow-lg hover:shadow-green-600/20 hover:border-green-500/50 transition-all duration-300">
       <CardContent className="p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <span className="bg-green-600/40 text-green-200 text-xs px-2 py-1 rounded">Topic</span>
-            <span className="bg-emerald-600/40 text-emerald-200 text-xs px-2 py-1 rounded">{topic.category}</span>
-          </div>
+        <div className="flex items-center gap-2 mb-3">
+          <span className="bg-green-600/40 text-green-200 text-xs px-2 py-1 rounded">Topic</span>
+          <span className="bg-emerald-600/40 text-emerald-200 text-xs px-2 py-1 rounded">{topic.category}</span>
         </div>
         <h3 className="text-white font-bold text-xl mb-2">
           {topic.term} • {topic.arabic}
         </h3>
         <p className="text-gray-300 text-sm mb-6 leading-relaxed">{topic.description}</p>
-        <Button className="w-full bg-green-600 hover:bg-green-700 text-white py-3">📖 Open Topic</Button>
+        <Link href={`/scans/${topic.term}`}>
+          <Button className="w-full bg-green-600 hover:bg-green-700 text-white py-3">
+            📖 Open Topic
+          </Button>
+        </Link>
       </CardContent>
     </Card>
   );
 }
 
 export default function ScansPage() {
+  const [search, setSearch] = useState("");
+  const [activeCategory, setActiveCategory] = useState("All");
+
+  const categories = ["All", ...Array.from(new Set(scanTopics.map((t) => t.category)))];
+
+  const filteredTopics = scanTopics.filter((topic) => {
+    const matchesSearch =
+      topic.term.toLowerCase().includes(search.toLowerCase()) ||
+      topic.arabic.includes(search) ||
+      topic.description.toLowerCase().includes(search.toLowerCase());
+
+    const matchesCategory = activeCategory === "All" || topic.category === activeCategory;
+
+    return matchesSearch && matchesCategory;
+  });
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-950 via-emerald-950 to-black">
-      <div className="container mx-auto px-6 py-8">
+      <div className="container mx-auto px-6 py-12">
         {/* Main Title */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Scans</h1>
           <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
             A collection of scans regarding creed, fiqh, history, and refutations within Twelver Shi‘i scholarship.
           </p>
         </div>
 
+        {/* Search + Categories */}
+        <div className="mb-10">
+          <input
+            type="text"
+            placeholder="🔍 Search scans..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full px-4 py-3 mb-6 rounded-lg bg-green-900/40 border border-green-600/40 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+
+          <div className="flex flex-wrap gap-3 justify-center">
+            {categories.map((cat) => (
+              <Button
+                key={cat}
+                size="sm"
+                onClick={() => setActiveCategory(cat)}
+                className={`px-4 py-2 rounded-full text-sm ${
+                  activeCategory === cat
+                    ? "bg-green-600 text-white"
+                    : "bg-green-900/40 border border-green-600/40 text-green-300 hover:bg-green-700/30"
+                }`}
+              >
+                {cat}
+              </Button>
+            ))}
+          </div>
+        </div>
+
         {/* Topics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-          {scanTopics.map((topic) => (
-            <TopicCard key={topic.id} topic={topic} />
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+          {filteredTopics.length > 0 ? (
+            filteredTopics.map((topic) => <TopicCard key={topic.id} topic={topic} />)
+          ) : (
+            <p className="text-center text-gray-400 col-span-full">No scans found for this search.</p>
+          )}
         </div>
 
         {/* Footer */}
-        <div className="text-center pt-8 border-t border-green-600/30">
+        <div className="text-center pt-10 border-t border-green-600/30">
           <div className="flex items-center justify-center gap-3 mb-6">
             <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center border border-green-300">
               <div className="text-white text-xs">☪</div>
             </div>
             <span className="text-white font-semibold text-lg">𝘼𝙡 𝙅𝙖‘𝙛𝙖𝙧𝙞𝙮𝙮𝙖</span>
           </div>
-          <p className="text-gray-300 italic">“May Allah have mercy on the one who revives our affair.” — Imām Ja‘far al-Ṣādiq (a)</p>
+          <p className="text-gray-300 italic">
+            “May Allah have mercy on the one who revives our affair.” — Imām Ja‘far al-Ṣādiq (a)
+          </p>
         </div>
       </div>
     </div>
