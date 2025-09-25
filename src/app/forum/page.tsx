@@ -561,4 +561,3 @@ export default function ForumPage() {
     </div>   {/* close background wrapper */}
   );
 }
-
