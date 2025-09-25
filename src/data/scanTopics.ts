@@ -14,6 +14,11 @@ export interface ScanTopic {
   scans?: Scan[];
 }
 
+export interface CategorizedScanTopic extends ScanTopic {
+  categoryId: string;
+  categoryName: string;
+}
+
 export interface ScanCategory {
   id: string; // e.g. "fiqh", "history"
   name: string; // Human-readable category
@@ -152,3 +157,12 @@ export const scanCategories: ScanCategory[] = [
     ],
   },
 ];
+
+export const scanTopics: CategorizedScanTopic[] = scanCategories.flatMap(
+  (category) =>
+    category.topics.map((topic) => ({
+      ...topic,
+      categoryId: category.id,
+      categoryName: category.name,
+    }))
+);

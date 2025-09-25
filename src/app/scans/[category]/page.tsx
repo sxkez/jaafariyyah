@@ -1,23 +1,25 @@
 // src/app/scans/[category]/page.tsx (SERVER)
 import { notFound } from "next/navigation";
-import { scanTopics } from "@/data/scanTopics";
+import { scanCategories, scanTopics } from "@/data/scanTopics";
 import CategoryClient from "./CategoryClient";
 
 export async function generateStaticParams() {
-  // Collect unique categories
-  const categories = Array.from(new Set(scanTopics.map((t) => t.category)));
-  return categories.map((cat) => ({ category: cat.toLowerCase() }));
+  return scanCategories.map((category) => ({ category: category.id }));
 }
 
 export default function CategoryPage({ params }: { params: { category: string } }) {
-  const categoryName = decodeURIComponent(params.category);
+  const categoryParam = decodeURIComponent(params.category);
+  const category = scanCategories.find(
+    (entry) => entry.id.toLowerCase() === categoryParam.toLowerCase()
+  );
 
-  // Find all topics in this category
+  if (!category) return notFound();
+
   const topics = scanTopics.filter(
-    (t) => t.category.toLowerCase() === categoryName.toLowerCase()
+    (topic) => topic.categoryId.toLowerCase() === category.id.toLowerCase()
   );
 
   if (!topics.length) return notFound();
 
-  return <CategoryClient category={categoryName} topics={topics} />;
+  return <CategoryClient category={category.name} topics={topics} />;
 }

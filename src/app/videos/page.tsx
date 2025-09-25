@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { motion, AnimatePresence } from "framer-motion";
 
 // 🔹 Sample Playlists
 const samplePlaylists = [
@@ -95,20 +94,10 @@ function VideoPlayerModal({
     Object.values(playlist.videoUrls)[0];
 
   return (
-    <AnimatePresence>
+    <>
       {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-        >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-green-950/90 border border-green-700 rounded-xl w-full max-w-4xl max-h-[90vh] overflow-auto shadow-xl"
-          >
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-green-950/90 border border-green-700 rounded-xl w-full max-w-4xl max-h-[90vh] overflow-auto shadow-xl">
             <div className="p-6">
               {/* Header */}
               <div className="flex justify-between items-center mb-4">
@@ -138,10 +127,10 @@ function VideoPlayerModal({
               {/* Description */}
               <p className="text-gray-300 text-sm">{playlist.description}</p>
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       )}
-    </AnimatePresence>
+    </>
   );
 }
 
@@ -160,7 +149,7 @@ function PlaylistCard({ playlist }: { playlist: typeof samplePlaylists[0] }) {
 
   return (
     <>
-      <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
+      <div className="transition-transform duration-200 hover:scale-[1.02]">
         <Card className="bg-green-900/30 border-green-700/40 hover:bg-green-900/50 transition-all duration-300 overflow-hidden">
           <CardContent className="p-0">
             <div className="flex flex-col">
@@ -240,7 +229,7 @@ function PlaylistCard({ playlist }: { playlist: typeof samplePlaylists[0] }) {
             </div>
           </CardContent>
         </Card>
-      </motion.div>
+      </div>
 
       {/* Modal */}
       <VideoPlayerModal

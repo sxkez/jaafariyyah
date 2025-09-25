@@ -10,7 +10,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { auth } from "@/lib/firebaseConfig"; // your Firebase config
+import { auth, isFirebaseConfigured } from "@/lib/firebaseConfig"; // your Firebase config
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -33,6 +33,9 @@ export function AuthModal({ isOpen, onClose, onAuth }: AuthModalProps) {
     setLoading(true);
 
     try {
+      if (!auth) {
+        throw new Error("Authentication is not configured.");
+      }
       if (isLogin) {
         // LOGIN
         const userCredential = await signInWithEmailAndPassword(
@@ -84,6 +87,9 @@ export function AuthModal({ isOpen, onClose, onAuth }: AuthModalProps) {
   const handleGoogleSignIn = async () => {
     setLoading(true);
     try {
+      if (!auth) {
+        throw new Error("Authentication is not configured.");
+      }
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
@@ -106,6 +112,25 @@ export function AuthModal({ isOpen, onClose, onAuth }: AuthModalProps) {
   };
 
   if (!isOpen) return null;
+
+  if (!isFirebaseConfigured || !auth) {
+    return (
+      <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md bg-green-950 border border-green-700/40">
+          <CardContent className="p-6 space-y-4 text-center text-white">
+            <h2 className="text-2xl font-semibold">Authentication Unavailable</h2>
+            <p className="text-sm text-green-200">
+              Firebase credentials are not configured. Please set the required
+              environment variables to enable login and registration.
+            </p>
+            <Button onClick={onClose} className="bg-green-700 hover:bg-green-600">
+              Close
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">

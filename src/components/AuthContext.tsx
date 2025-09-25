@@ -18,6 +18,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!auth) {
+      setLoading(false);
+      return () => {};
+    }
+
     // Listen to Firebase auth state
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
@@ -28,6 +33,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const logout = async () => {
+    if (!auth) return;
     await signOut(auth);
     setUser(null);
   };
