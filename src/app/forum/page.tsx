@@ -188,18 +188,24 @@ export default function ForumPage() {
   const [editingPost, setEditingPost] = useState<ForumPost | null>(null);
   const { user, isAuthenticated } = useAuth();
 
-  useEffect(() => {
-    const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-    const unsub = onSnapshot(q, (snapshot) => {
-      setPosts(
-        snapshot.docs.map((doc) => ({
+useEffect(() => {
+  const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+  const unsub = onSnapshot(q, (snapshot) => {
+    setPosts(
+      snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
           id: doc.id,
-          ...doc.data(),
-        })) as ForumPost[]
-      );
-    });
-    return () => unsub();
-  }, []);
+          likes: data.likes || [],
+          dislikes: data.dislikes || [],
+          replies: data.replies || 0,
+          ...data,
+        } as ForumPost;
+      })
+    );
+  });
+  return () => unsub();
+}, []);
 
   // Create Post
   const handleCreatePost = async () => {
