@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import {
   getAIRecommendations,
   type BookRecommendation,
-} from "@/services/recommendationService"; // new service
+} from "@/services/aiRecommendationService"; // new service
 
 interface BookRecommendationsWidgetProps {
   currentCategory?: string;
