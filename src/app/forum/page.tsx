@@ -16,6 +16,7 @@ import {
   arrayUnion,
   arrayRemove,
   deleteDoc,
+  increment,
 } from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
 
@@ -24,7 +25,7 @@ interface ForumPost {
   title: string;
   author: string;
   authorId: string;
-  authorAvatar: string;
+  authorAvatar?: string;
   content: string;
   category: string;
   tags: string[];
@@ -42,7 +43,7 @@ interface Reply {
   postId: string;
   author: string;
   authorId: string;
-  authorAvatar: string;
+  authorAvatar?: string;
   content: string;
   createdAt: any;
 }
@@ -56,6 +57,28 @@ const forumCategories = [
   { id: "arabic", name: "Arabic Language", icon: "📝" },
   { id: "questions", name: "Questions & Answers", icon: "❓" },
 ];
+
+const normalizeIds = (value: unknown): string[] => {
+  if (Array.isArray(value)) {
+    return value.filter((entry): entry is string => typeof entry === "string");
+  }
+  if (value && typeof value === "object") {
+    return Object.keys(value as Record<string, unknown>);
+  }
+  return [];
+};
+
+const normalizeNames = (value: unknown): string[] => {
+  if (Array.isArray(value)) {
+    return value.filter((entry): entry is string => typeof entry === "string");
+  }
+  if (value && typeof value === "object") {
+    return Object.values(value as Record<string, unknown>)
+      .map((entry) => (typeof entry === "string" ? entry : null))
+      .filter((entry): entry is string => Boolean(entry));
+  }
+  return [];
+};
 
 function PostCard({
   post,
@@ -73,6 +96,14 @@ function PostCard({
   onDelete: (postId: string) => void;
 }) {
   const { user } = useAuth();
+  const currentUserId = user?.email || user?.name || null;
+  const likes = normalizeIds(post.likes);
+  const dislikes = normalizeIds(post.dislikes);
+  const likedBy = normalizeNames(post.likedBy);
+
+  const authorAvatar =
+    post.authorAvatar ||
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(post.author)}`;
 
   const formatTimeAgo = (date: any) => {
     if (!date) return "just now";
@@ -96,11 +127,7 @@ function PostCard({
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
             {post.isPinned && <span className="text-yellow-400">📌</span>}
-            <img
-              src={post.authorAvatar}
-              alt={post.author}
-              className="w-10 h-10 rounded-full"
-            />
+            <img src={authorAvatar} alt={post.author} className="w-10 h-10 rounded-full" />
             <div>
               <h3 className="text-white font-semibold text-lg">
                 {post.title}
@@ -117,7 +144,7 @@ function PostCard({
             </div>
           </div>
 
-          {user?.uid === post.authorId && (
+          {currentUserId === post.authorId && (
             <div className="flex gap-2">
               <Button
                 size="sm"
@@ -149,24 +176,24 @@ function PostCard({
             variant="ghost"
             onClick={() => onLike(post.id)}
             className={`text-sm ${
-              user && post.likes.includes(user.uid)
+              currentUserId && likes.includes(currentUserId)
                 ? "text-red-400"
                 : "text-gray-400 hover:text-white"
             }`}
           >
-            ❤️ {post.likes.length}
+            ❤️ {likes.length}
           </Button>
           <Button
             size="sm"
             variant="ghost"
             onClick={() => onDislike(post.id)}
             className={`text-sm ${
-              user && post.dislikes.includes(user.uid)
+              currentUserId && dislikes.includes(currentUserId)
                 ? "text-yellow-400"
                 : "text-gray-400 hover:text-white"
             }`}
           >
-            👎 {post.dislikes.length}
+            👎 {dislikes.length}
           </Button>
           <Button
             size="sm"
@@ -179,9 +206,9 @@ function PostCard({
         </div>
 
         {/* Show who liked */}
-        {post.likedBy?.length > 0 && (
+        {likedBy.length > 0 && (
           <p className="text-xs text-gray-400">
-            Liked by {post.likedBy.join(", ")}
+            Liked by {likedBy.join(", ")}
           </p>
         )}
       </CardContent>
@@ -199,8 +226,14 @@ export default function ForumPage() {
   const [editingPost, setEditingPost] = useState<ForumPost | null>(null);
   const [showNewPostModal, setShowNewPostModal] = useState(false);
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [replyDraft, setReplyDraft] = useState("");
   const [replies, setReplies] = useState<Record<string, Reply[]>>({});
   const { user, isAuthenticated } = useAuth();
+  const userId = user?.email || user?.name || null;
+  const userDisplayName = user?.name || "Anonymous";
+  const userAvatar =
+    user?.avatar ||
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(userDisplayName)}`;
 
   // Load posts
   useEffect(() => {
@@ -211,11 +244,11 @@ export default function ForumPage() {
           const data = doc.data();
           return {
             id: doc.id,
-            likes: Array.isArray(data.likes) ? data.likes : [],
-            dislikes: Array.isArray(data.dislikes) ? data.dislikes : [],
-            likedBy: Array.isArray(data.likedBy) ? data.likedBy : [],
-            replies: data.replies || 0,
             ...data,
+            likes: normalizeIds(data.likes),
+            dislikes: normalizeIds(data.dislikes),
+            likedBy: normalizeNames(data.likedBy),
+            replies: typeof data.replies === "number" ? data.replies : 0,
           } as ForumPost;
         })
       );
@@ -225,12 +258,12 @@ export default function ForumPage() {
 
   // Load replies for each post
   useEffect(() => {
-    posts.forEach((post) => {
+    const unsubscribes = posts.map((post) => {
       const q = query(
         collection(db, "posts", post.id, "replies"),
         orderBy("createdAt", "asc")
       );
-      const unsub = onSnapshot(q, (snapshot) => {
+      return onSnapshot(q, (snapshot) => {
         setReplies((prev) => ({
           ...prev,
           [post.id]: snapshot.docs.map((doc) => ({
@@ -239,23 +272,28 @@ export default function ForumPage() {
           })) as Reply[],
         }));
       });
-      return () => unsub();
     });
+
+    return () => {
+      unsubscribes.forEach((unsub) => unsub());
+    };
   }, [posts]);
 
   // Create Post
   const handleCreatePost = async () => {
-    if (!user) return alert("Login first");
+    if (!user || !userId) return alert("Login first");
+    if (!newTitle.trim() || !newContent.trim()) {
+      alert("Title and content are required");
+      return;
+    }
     await addDoc(collection(db, "posts"), {
       title: newTitle,
       content: newContent,
       category: newCategory,
       tags: [],
-      author: user.displayName || "Anonymous",
-      authorAvatar:
-        user.photoURL ||
-        `https://ui-avatars.com/api/?name=${user.displayName || "User"}`,
-      authorId: user.uid,
+      author: userDisplayName,
+      authorAvatar: userAvatar,
+      authorId: userId,
       likes: [],
       dislikes: [],
       likedBy: [],
@@ -266,56 +304,71 @@ export default function ForumPage() {
     });
     setNewTitle("");
     setNewContent("");
+    setNewCategory("aqidah");
     setShowNewPostModal(false);
   };
 
   // Like
   const handleLike = async (postId: string) => {
-    if (!user) return alert("Login first");
+    if (!user || !userId) return alert("Login first");
     const postRef = doc(db, "posts", postId);
     await updateDoc(postRef, {
-      likes: arrayUnion(user.uid),
-      dislikes: arrayRemove(user.uid),
-      likedBy: arrayUnion(user.displayName || "Anonymous"),
+      likes: arrayUnion(userId),
+      dislikes: arrayRemove(userId),
+      likedBy: arrayUnion(userDisplayName),
     });
   };
 
   // Dislike
   const handleDislike = async (postId: string) => {
-    if (!user) return alert("Login first");
+    if (!user || !userId) return alert("Login first");
     const postRef = doc(db, "posts", postId);
     await updateDoc(postRef, {
-      dislikes: arrayUnion(user.uid),
-      likes: arrayRemove(user.uid),
-      likedBy: arrayRemove(user.displayName || "Anonymous"),
+      dislikes: arrayUnion(userId),
+      likes: arrayRemove(userId),
+      likedBy: arrayRemove(userDisplayName),
     });
   };
 
   // Reply
   const handleReply = async (postId: string, replyText: string) => {
-    if (!user) return alert("Login first");
+    if (!user || !userId) return alert("Login first");
+    if (!replyText.trim()) return;
     const replyRef = collection(db, "posts", postId, "replies");
     await addDoc(replyRef, {
       postId,
       content: replyText,
-      author: user.displayName || "Anonymous",
-      authorId: user.uid,
-      authorAvatar:
-        user.photoURL ||
-        `https://ui-avatars.com/api/?name=${user.displayName || "User"}`,
+      author: userDisplayName,
+      authorId: userId,
+      authorAvatar: userAvatar,
       createdAt: serverTimestamp(),
     });
     const postRef = doc(db, "posts", postId);
     await updateDoc(postRef, {
-      replies: arrayUnion(1),
+      replies: increment(1),
       lastActivity: serverTimestamp(),
     });
     setReplyingTo(null);
+    setReplyDraft("");
+  };
+
+  const handleStartReply = (postId: string) => {
+    setReplyDraft("");
+    setReplyingTo((prev) => (prev === postId ? null : postId));
+  };
+
+  const handleStartEdit = (post: ForumPost) => {
+    setEditingPost(post);
+    setNewContent(post.content);
   };
 
   // Edit
   const handleEdit = async () => {
     if (!editingPost) return;
+    if (!newContent.trim()) {
+      alert("Content cannot be empty");
+      return;
+    }
     const postRef = doc(db, "posts", editingPost.id);
     await updateDoc(postRef, {
       content: newContent,
@@ -407,8 +460,8 @@ export default function ForumPage() {
                 post={post}
                 onLike={handleLike}
                 onDislike={handleDislike}
-                onReply={() => setReplyingTo(post.id)}
-                onEdit={setEditingPost}
+                onReply={handleStartReply}
+                onEdit={handleStartEdit}
                 onDelete={handleDelete}
               />
 
@@ -420,7 +473,9 @@ export default function ForumPage() {
                 >
                   <div className="flex items-center gap-2 mb-1">
                     <img
-                      src={reply.authorAvatar}
+                      src=
+                        {reply.authorAvatar ||
+                          `https://ui-avatars.com/api/?name=${encodeURIComponent(reply.author)}`}
                       alt={reply.author}
                       className="w-6 h-6 rounded-full"
                     />
@@ -434,16 +489,32 @@ export default function ForumPage() {
               {replyingTo === post.id && (
                 <div className="ml-12 mt-3">
                   <textarea
+                    value={replyDraft}
+                    onChange={(e) => setReplyDraft(e.target.value)}
                     placeholder="Write a reply..."
                     className="w-full px-3 py-2 rounded bg-green-900/30 border border-green-700/30 text-white"
-                    onKeyDown={async (e) => {
-                      if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        await handleReply(post.id, e.currentTarget.value);
-                        e.currentTarget.value = "";
-                      }
-                    }}
+                    rows={3}
                   />
+                  <div className="flex justify-end gap-2 mt-2">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => {
+                        setReplyDraft("");
+                        setReplyingTo(null);
+                      }}
+                      className="text-gray-400 hover:text-white"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      size="sm"
+                      onClick={() => handleReply(post.id, replyDraft)}
+                      className="bg-green-600 hover:bg-green-700 text-white"
+                    >
+                      Reply
+                    </Button>
+                  </div>
                 </div>
               )}
             </div>
@@ -462,7 +533,13 @@ export default function ForumPage() {
                 rows={5}
               />
               <div className="flex justify-end gap-3">
-                <Button onClick={() => setEditingPost(null)} variant="ghost">
+                <Button
+                  onClick={() => {
+                    setEditingPost(null);
+                    setNewContent("");
+                  }}
+                  variant="ghost"
+                >
                   Cancel
                 </Button>
                 <Button onClick={handleEdit} className="bg-green-600 text-white">
@@ -497,7 +574,6 @@ export default function ForumPage() {
               <select
                 value={newCategory}
                 onChange={(e) => setNewCategory(e.target.value)}
-                className="w-full mb-4 px-3 py-2 bg-green-900/30 border border-green-700/30 rounded text-white
                 className="w-full mb-4 px-3 py-2 bg-green-900/30 border border-green-700/30 rounded text-white"
               >
                 {forumCategories
@@ -557,8 +633,8 @@ export default function ForumPage() {
             Ja‘far al-Ṣādiq (a)
           </p>
         </div>
-      </div> {/* close container mx-auto */}
-    </div>   {/* close background wrapper */}
+      </div>
+    </div>
   );
 }
 
