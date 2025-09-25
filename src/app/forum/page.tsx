@@ -58,6 +58,28 @@ const forumCategories = [
   { id: "questions", name: "Questions & Answers", icon: "❓" },
 ];
 
+const normalizeIds = (value: unknown): string[] => {
+  if (Array.isArray(value)) {
+    return value.filter((entry): entry is string => typeof entry === "string");
+  }
+  if (value && typeof value === "object") {
+    return Object.keys(value as Record<string, unknown>);
+  }
+  return [];
+};
+
+const normalizeNames = (value: unknown): string[] => {
+  if (Array.isArray(value)) {
+    return value.filter((entry): entry is string => typeof entry === "string");
+  }
+  if (value && typeof value === "object") {
+    return Object.values(value as Record<string, unknown>)
+      .map((entry) => (typeof entry === "string" ? entry : null))
+      .filter((entry): entry is string => Boolean(entry));
+  }
+  return [];
+};
+
 function PostCard({
   post,
   onLike,
@@ -75,6 +97,9 @@ function PostCard({
 }) {
   const { user } = useAuth();
   const currentUserId = user?.email || user?.name || null;
+  const likes = normalizeIds(post.likes);
+  const dislikes = normalizeIds(post.dislikes);
+  const likedBy = normalizeNames(post.likedBy);
 
   const authorAvatar =
     post.authorAvatar ||
@@ -151,24 +176,24 @@ function PostCard({
             variant="ghost"
             onClick={() => onLike(post.id)}
             className={`text-sm ${
-              currentUserId && post.likes.includes(currentUserId)
+              currentUserId && likes.includes(currentUserId)
                 ? "text-red-400"
                 : "text-gray-400 hover:text-white"
             }`}
           >
-            ❤️ {post.likes.length}
+            ❤️ {likes.length}
           </Button>
           <Button
             size="sm"
             variant="ghost"
             onClick={() => onDislike(post.id)}
             className={`text-sm ${
-              currentUserId && post.dislikes.includes(currentUserId)
+              currentUserId && dislikes.includes(currentUserId)
                 ? "text-yellow-400"
                 : "text-gray-400 hover:text-white"
             }`}
           >
-            👎 {post.dislikes.length}
+            👎 {dislikes.length}
           </Button>
           <Button
             size="sm"
@@ -181,9 +206,9 @@ function PostCard({
         </div>
 
         {/* Show who liked */}
-        {post.likedBy?.length > 0 && (
+        {likedBy.length > 0 && (
           <p className="text-xs text-gray-400">
-            Liked by {post.likedBy.join(", ")}
+            Liked by {likedBy.join(", ")}
           </p>
         )}
       </CardContent>
@@ -219,11 +244,11 @@ export default function ForumPage() {
           const data = doc.data();
           return {
             id: doc.id,
-            likes: Array.isArray(data.likes) ? data.likes : [],
-            dislikes: Array.isArray(data.dislikes) ? data.dislikes : [],
-            likedBy: Array.isArray(data.likedBy) ? data.likedBy : [],
-            replies: data.replies || 0,
             ...data,
+            likes: normalizeIds(data.likes),
+            dislikes: normalizeIds(data.dislikes),
+            likedBy: normalizeNames(data.likedBy),
+            replies: typeof data.replies === "number" ? data.replies : 0,
           } as ForumPost;
         })
       );
